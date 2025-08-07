@@ -1,0 +1,153 @@
+<div class="reservation-form-container">
+  <!-- Not logged in state -->
+  <div class="not-logged-in" *ngIf="!isLoggedIn">
+    <mat-icon>account_circle</mat-icon>
+    <h2>Inicia sesión para hacer reservas</h2>
+    <p>Necesitas iniciar sesión para poder reservar canchas.</p>
+    <a mat-raised-button color="primary" routerLink="/login">
+      Iniciar Sesión
+    </a>
+  </div>
+
+  <!-- Loading state -->
+  <div class="loading-state" *ngIf="isLoggedIn && loading">
+    <mat-icon>sports_tennis</mat-icon>
+    <h3>Cargando información...</h3>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" *ngIf="isLoggedIn && error">
+    <mat-icon>error_outline</mat-icon>
+    <h3>No se pudo cargar la información</h3>
+    <p>Lo sentimos, no pudimos cargar la información necesaria para crear tu reserva. Por favor, intenta nuevamente más tarde.</p>
+    <a routerLink="/courts" class="back-button">Volver a canchas</a>
+  </div>
+
+  <!-- Reservation form -->
+  <div class="reservation-form-content" *ngIf="isLoggedIn && !loading && !error">
+    <div class="reservation-form-header">
+      <a routerLink="/courts" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        Volver a canchas
+      </a>
+      <h1>Nueva Reserva</h1>
+    </div>
+
+    <div class="form-container">
+      <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Selecciona una cancha</mat-label>
+            <mat-select formControlName="courtId">
+              <mat-option *ngFor="let court of courts" [value]="court.id">
+                {{ court.name }} - {{ court.type | titlecase }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('courtId')?.hasError('required')">
+              Debes seleccionar una cancha
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="selected-court" *ngIf="selectedCourt">
+          <mat-card>
+            <div class="court-image">
+              <img [src]="selectedCourt.imageUrl || 'assets/images/default-court.jpg'" [alt]="selectedCourt.name">
+            </div>
+            <div class="court-info">
+              <h3>{{ selectedCourt.name }}</h3>
+              <p class="court-type">{{ selectedCourt.type | titlecase }}</p>
+              <p class="court-location"><mat-icon>location_on</mat-icon> {{ selectedCourt.location }}</p>
+              <p class="court-price"><mat-icon>attach_money</mat-icon> ${{ selectedCourt.pricePerHour }} / hora</p>
+            </div>
+          </mat-card>
+        </div>
+
+        <div class="form-row date-time-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" [min]="getMinDate()" [max]="getMaxDate()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="reservationForm.get('date')?.hasError('required')">
+              Debes seleccionar una fecha
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Hora de inicio</mat-label>
+            <mat-select formControlName="startTime" [disabled]="!reservationForm.get('date')?.value || !selectedCourt">
+              <mat-option *ngFor="let timeSlot of availableTimeSlots" [value]="timeSlot">
+                {{ timeSlot }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('startTime')?.hasError('required')">
+              Debes seleccionar una hora de inicio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Duración (horas)</mat-label>
+            <mat-select formControlName="duration">
+              <mat-option [value]="1">1 hora</mat-option>
+              <mat-option [value]="2">2 horas</mat-option>
+              <mat-option [value]="3">3 horas</mat-option>
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('duration')?.hasError('required')">
+              Debes seleccionar la duración
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notas adicionales</mat-label>
+            <textarea matInput formControlName="notes" rows="3" placeholder="Información adicional para tu reserva"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="reservation-summary" *ngIf="selectedCourt && reservationForm.get('date')?.value && reservationForm.get('startTime')?.value && reservationForm.get('duration')?.value">
+          <h3>Resumen de la reserva</h3>
+          <div class="summary-details">
+            <div class="summary-item">
+              <span class="label">Cancha:</span>
+              <span class="value">{{ selectedCourt.name }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Fecha:</span>
+              <span class="value">{{ reservationForm.get('date')?.value | date:'fullDate' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Hora de inicio:</span>
+              <span class="value">{{ reservationForm.get('startTime')?.value }}</span>
+            </div>
+            <div class="summary-item" *ngIf="reservationForm.get('startTime')?.value && reservationForm.get('duration')?.value">
+              <span class="label">Hora de fin:</span>
+              <span class="value">{{ calculateEndTime() }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Duración:</span>
+              <span class="value">{{ reservationForm.get('duration')?.value }} hora(s)</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Precio total:</span>
+              <span class="value price">${{ selectedCourt.pricePerHour * reservationForm.get('duration')?.value }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" mat-button routerLink="/courts">
+            Cancelar
+          </button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="reservationForm.invalid || submitting">
+            <mat-icon>event_available</mat-icon>
+            {{ submitting ? 'Creando reserva...' : 'Confirmar Reserva' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

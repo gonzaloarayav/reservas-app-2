@@ -1,0 +1,82 @@
+<div class="court-detail-container">
+  <!-- Loading state -->
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon>sports_tennis</mat-icon>
+    <h3>Cargando detalles de la cancha...</h3>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" *ngIf="error">
+    <mat-icon>error_outline</mat-icon>
+    <h3>No se pudo cargar la información</h3>
+    <p>Lo sentimos, no pudimos cargar los detalles de esta cancha. Por favor, intenta nuevamente más tarde.</p>
+    <a routerLink="/courts" class="back-button">Volver a canchas</a>
+  </div>
+
+  <!-- Court details -->
+  <div class="court-details" *ngIf="court && !loading && !error">
+    <div class="court-detail-header">
+      <a routerLink="/courts" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        Volver a canchas
+      </a>
+      <h1>{{ court.name }}</h1>
+    </div>
+
+    <div class="court-detail-content">
+      <div class="court-image-container">
+        <img [src]="court.imageUrl" [alt]="court.name" class="court-image">
+      </div>
+
+      <div class="court-info-container">
+        <div class="court-main-info">
+          <div class="court-type-location">
+            <span class="court-type">{{ court.type }}</span>
+            <div class="court-location">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ court.location }}</span>
+            </div>
+          </div>
+          <div class="court-price">
+            <span class="price-label">Precio por hora</span>
+            <span class="price-value">${{ court.pricePerHour }}</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="court-description">
+          <h3>Descripción</h3>
+          <p>{{ court.description }}</p>
+        </div>
+
+        <div class="court-features" *ngIf="court.features && court.features.length > 0">
+          <h3>Características</h3>
+          <div class="features-list">
+            <span class="feature-tag" *ngFor="let feature of court.features">
+              <mat-icon *ngIf="feature === 'Iluminación'">lightbulb</mat-icon>
+              <mat-icon *ngIf="feature === 'Vestuarios'">checkroom</mat-icon>
+              <mat-icon *ngIf="feature === 'Estacionamiento'">local_parking</mat-icon>
+              <mat-icon *ngIf="feature === 'Cafetería'">local_cafe</mat-icon>
+              <mat-icon *ngIf="feature === 'Techada'">roofing</mat-icon>
+              {{ feature }}
+            </span>
+          </div>
+        </div>
+
+        <div class="court-availability">
+          <h3>Disponibilidad</h3>
+          <p>Esta cancha está disponible de lunes a domingo de 8:00 a 22:00 hrs.</p>
+        </div>
+
+        <div class="court-actions">
+          <a routerLink="/reservations" class="reserve-button">Reservar ahora</a>
+          <button class="contact-button">
+            <mat-icon>phone</mat-icon>
+            Contactar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

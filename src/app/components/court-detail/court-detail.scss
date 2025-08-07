@@ -1,0 +1,428 @@
+@import '../../../styles/variables';
+
+.court-detail-container {
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
+}
+
+// Loading state
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background-color: var(--surface-container-low);
+  border-radius: 16px;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--outline-variant);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--tertiary) 100%);
+  }
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    opacity: 0.8;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--on-surface);
+    font-weight: 500;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(0.95);
+      opacity: 0.7;
+    }
+  }
+}
+
+// Error state
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background-color: var(--error-container);
+  border-radius: 16px;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--outline-variant);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--error);
+  }
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 1.5rem;
+    color: var(--on-error-container);
+    opacity: 0.9;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--on-error-container);
+    font-weight: 500;
+  }
+
+  p {
+    color: var(--on-error-container);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    padding: 0 1.5rem;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    background-color: var(--on-error-container);
+    color: var(--error-container);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+    }
+  }
+}
+
+// Court details
+.court-details {
+  margin-top: 1rem;
+}
+
+.court-detail-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--outline-variant);
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease;
+
+    mat-icon {
+      margin-right: 0.5rem;
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+    }
+
+    &:hover {
+      color: var(--primary-hover);
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    color: var(--on-surface);
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+    padding-left: 1rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.25rem;
+      bottom: 0.25rem;
+      width: 4px;
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+.court-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+  }
+}
+
+.court-image-container {
+  flex: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-2);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 50%);
+    pointer-events: none;
+  }
+
+  .court-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+
+    @media (min-width: 768px) {
+      height: 400px;
+    }
+
+    @media (min-width: 992px) {
+      height: 500px;
+    }
+  }
+}
+
+.court-info-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.court-main-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.court-type-location {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.court-type {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.court-location {
+  display: flex;
+  align-items: center;
+  color: var(--on-surface-variant);
+  font-size: 0.9375rem;
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    margin-right: 0.25rem;
+    color: var(--primary);
+  }
+}
+
+.court-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .price-label {
+    font-size: 0.875rem;
+    color: var(--on-surface-variant);
+    margin-bottom: 0.25rem;
+  }
+
+  .price-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+}
+
+mat-divider {
+  margin: 0.5rem 0;
+}
+
+.court-description,
+.court-features,
+.court-availability {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--on-surface-variant);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.feature-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: var(--surface-container-high);
+  color: var(--on-surface);
+  padding: 0.375rem 0.75rem;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: 1px solid var(--outline-variant);
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    color: var(--primary);
+  }
+
+  &:hover {
+    background-color: var(--surface-container-highest);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-1);
+  }
+}
+
+.court-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+
+  .reserve-button,
+  .contact-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    padding: 0 1.5rem;
+    height: 48px;
+    line-height: 48px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .reserve-button {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    text-decoration: none;
+    flex: 1;
+    min-width: 150px;
+
+    &:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+    }
+  }
+
+  .contact-button {
+    background-color: var(--surface-container-high);
+    color: var(--on-surface);
+    border: 1px solid var(--outline);
+    flex: 1;
+    min-width: 150px;
+
+    mat-icon {
+      margin-right: 0.5rem;
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+    }
+
+    &:hover {
+      background-color: var(--surface-container-highest);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-1);
+    }
+  }
+
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+  }
+}

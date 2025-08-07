@@ -1,0 +1,42 @@
+<mat-toolbar class="navbar">
+  <div class="container">
+    <a routerLink="/" class="logo">
+      <mat-icon>sports_tennis</mat-icon>
+      <span>ReservasCanchas</span>
+    </a>
+    
+    <div class="spacer"></div>
+    
+    <nav class="nav-links">
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>home</mat-icon> <span>Inicio</span>
+      </a>
+      <a mat-button routerLink="/courts" routerLinkActive="active">
+        <mat-icon>sports_tennis</mat-icon> <span>Canchas</span>
+      </a>
+      <a mat-button routerLink="/reservations" routerLinkActive="active">
+        <mat-icon>event</mat-icon> <span>Reservas</span>
+      </a>
+      
+      <!-- Menú de usuario -->
+      <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="isLoggedIn()" class="user-button">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ currentUser?.name || 'Usuario' }}</span>
+      </button>
+      <a mat-button routerLink="/login" *ngIf="!isLoggedIn()" class="login-button">
+        <mat-icon>login</mat-icon>
+        <span>Iniciar Sesión</span>
+      </a>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>Mi Perfil</span>
+        </a>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </nav>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,60 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Reserva tu cancha de tenis fácilmente</h1>
+      <p class="hero-subtitle">Sistema de reservas online para canchas deportivas</p>
+      <div class="hero-actions">
+        <a mat-raised-button color="primary" routerLink="/courts">
+          <mat-icon>sports_tennis</mat-icon> Ver Canchas
+        </a>
+        <a mat-raised-button color="accent" routerLink="/reservations">
+          <mat-icon>event</mat-icon> Mis Reservas
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Nuestras Características</h2>
+    <div class="features-grid">
+      <mat-card class="feature-card" *ngFor="let feature of features">
+        <mat-card-content>
+          <mat-icon class="feature-icon">{{ feature.icon }}</mat-icon>
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-description">{{ feature.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Featured Courts Section -->
+  <section class="courts-section">
+    <h2 class="section-title">Canchas Destacadas</h2>
+    <div class="courts-grid">
+      <mat-card class="court-card" *ngFor="let court of featuredCourts$ | async">
+        <img mat-card-image [src]="court.imageUrl || 'assets/images/default-court.jpg'" alt="{{ court.name }}">
+        <mat-card-content>
+          <h3 class="court-name">{{ court.name }}</h3>
+          <p class="court-type">{{ court.type | titlecase }}</p>
+          <p class="court-location">{{ court.location }}</p>
+          <p class="court-price">${{ court.pricePerHour }} / hora</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-button color="primary" [routerLink]="['/courts', court.id]">
+            <mat-icon>visibility</mat-icon> Ver Detalles
+          </a>
+          <a mat-button color="accent" [routerLink]="['/reservations/new']" [queryParams]="{courtId: court.id}">
+            <mat-icon>event_available</mat-icon> Reservar
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class="view-all-container">
+      <a mat-raised-button color="primary" routerLink="/courts">
+        Ver Todas las Canchas
+      </a>
+    </div>
+  </section>
+</div>

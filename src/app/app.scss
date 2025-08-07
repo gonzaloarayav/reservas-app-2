@@ -1,0 +1,13 @@
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: calc(100vh - 64px); /* Altura total menos la altura de la barra de navegación */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,287 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('/assets/images/tennis-court.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 100px 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(0,191,165,0.2) 0%, transparent 70%);
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 40px;
+  opacity: 0.95;
+  font-weight: 300;
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.hero-actions a {
+  min-width: 160px;
+  padding: 10px 24px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-radius: 30px;
+  transition: var(--transition);
+}
+
+.hero-actions a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Features Section */
+.section-title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--accent-color);
+  border-radius: 2px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.feature-card {
+  padding: 30px;
+  text-align: center;
+  transition: var(--transition);
+  border-radius: var(--border-radius);
+  background-color: white;
+  border: 1px solid var(--medium-gray);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.feature-icon {
+  font-size: 56px;
+  height: 56px;
+  width: 56px;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  transition: var(--transition);
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+.feature-title {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.feature-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+/* Courts Section */
+.courts-section {
+  padding: 20px 0 60px;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  margin: 0 20px 40px;
+}
+
+.courts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+.court-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: var(--transition);
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.court-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.court-card img {
+  height: 200px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.court-card:hover img {
+  transform: scale(1.05);
+}
+
+.court-card mat-card-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.court-name {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.court-type {
+  color: var(--primary-color);
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: rgba(63, 81, 181, 0.1);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.court-location, .court-price {
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.court-price {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-top: 12px;
+  color: var(--accent-color);
+}
+
+.court-card mat-card-actions {
+  padding: 0 16px 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.court-card mat-card-actions a {
+  flex: 1;
+  margin: 0 4px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.view-all-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.view-all-container a {
+  border-radius: 30px;
+  padding: 8px 24px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.view-all-container a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 60px 16px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .hero-actions a {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+}

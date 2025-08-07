@@ -1,0 +1,98 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to right, var(--primary-color), #5c6bc0);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  padding: 0 20px;
+  height: 64px;
+}
+
+.logo {
+  text-decoration: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-links a {
+  border-radius: 4px;
+  transition: var(--transition);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 0 16px;
+  height: 36px;
+  line-height: 36px;
+}
+
+.nav-links a mat-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links a:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Menú de usuario */
+.user-button {
+  border-radius: 20px;
+  padding: 0 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .nav-links {
+    gap: 4px;
+  }
+  
+  .nav-links a span {
+    display: none;
+  }
+  
+  .nav-links a {
+    min-width: 40px;
+    padding: 0 8px;
+  }
+  
+  .nav-links a mat-icon {
+    margin-right: 0;
+  }
+}

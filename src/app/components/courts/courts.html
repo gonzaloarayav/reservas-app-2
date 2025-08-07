@@ -1,0 +1,69 @@
+<div class="courts-container">
+  <div class="courts-header">
+    <h1>Canchas Disponibles</h1>
+    <p>Encuentra y reserva la cancha perfecta para tu deporte favorito</p>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar canchas</mat-label>
+        <input matInput [(ngModel)]="searchQuery" placeholder="Nombre o ubicación">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de cancha</mat-label>
+        <mat-select [(ngModel)]="selectedType">
+          <mat-option value="">Todos los tipos</mat-option>
+          <mat-option *ngFor="let type of courtTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="filter-actions">
+        <button mat-raised-button color="primary" (click)="applyFilters()">
+          <mat-icon>filter_list</mat-icon> Aplicar Filtros
+        </button>
+        <button mat-button (click)="resetFilters()">
+          <mat-icon>clear</mat-icon> Limpiar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courts List -->
+  <div class="courts-grid">
+    <mat-card class="court-card" *ngFor="let court of filteredCourts$ | async">
+      <img mat-card-image [src]="court.imageUrl || 'assets/images/default-court.jpg'" alt="{{ court.name }}">
+      <mat-card-content>
+        <h2 class="court-name">{{ court.name }}</h2>
+        <p class="court-type">{{ court.type | titlecase }}</p>
+        <p class="court-location"><mat-icon>location_on</mat-icon> {{ court.location }}</p>
+        <p class="court-price"><mat-icon>attach_money</mat-icon> ${{ court.pricePerHour }} / hora</p>
+        
+        <div class="court-features" *ngIf="court.features && court.features.length > 0">
+          <span class="feature-tag" *ngFor="let feature of court.features">{{ feature }}</span>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button color="primary" [routerLink]="['/courts', court.id]">
+          <mat-icon>visibility</mat-icon> Ver Detalles
+        </a>
+        <a mat-raised-button color="accent" [routerLink]="['/reservations/new']" [queryParams]="{courtId: court.id}">
+          <mat-icon>event_available</mat-icon> Reservar
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="(filteredCourts$ | async)?.length === 0">
+    <mat-icon>sports_tennis</mat-icon>
+    <h3>No se encontraron canchas</h3>
+    <p>Intenta con otros filtros o vuelve más tarde</p>
+    <button mat-raised-button color="primary" (click)="resetFilters()">
+      Ver todas las canchas
+    </button>
+  </div>
+</div>
