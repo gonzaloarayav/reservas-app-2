@@ -9,12 +9,16 @@
   <div class="error-state" *ngIf="error">
     <mat-icon>error_outline</mat-icon>
     <h3>No se pudo cargar la información</h3>
-    <p>Lo sentimos, no pudimos cargar los detalles de esta cancha. Por favor, intenta nuevamente más tarde.</p>
+    <p>
+      Lo sentimos, no pudimos cargar los detalles de esta cancha. Por favor,
+      intenta nuevamente más tarde.
+    </p>
     <a routerLink="/courts" class="back-button">Volver a canchas</a>
   </div>
 
   <!-- Court details -->
-  <div class="court-details" *ngIf="court && !loading && !error">
+  @if(court && !loading && !error){
+  <div class="court-details">
     <div class="court-detail-header">
       <a routerLink="/courts" class="back-link">
         <mat-icon>arrow_back</mat-icon>
@@ -25,7 +29,7 @@
 
     <div class="court-detail-content">
       <div class="court-image-container">
-        <img [src]="court.imageUrl" [alt]="court.name" class="court-image">
+        <img [src]="court.imageUrl" [alt]="court.name" class="court-image" />
       </div>
 
       <div class="court-info-container">
@@ -50,27 +54,46 @@
           <p>{{ court.description }}</p>
         </div>
 
-        <div class="court-features" *ngIf="court.features && court.features.length > 0">
+        @if(court.features && court.features.length > 0){
+        <div class="court-features">
           <h3>Características</h3>
           <div class="features-list">
-            <span class="feature-tag" *ngFor="let feature of court.features">
-              <mat-icon *ngIf="feature === 'Iluminación'">lightbulb</mat-icon>
-              <mat-icon *ngIf="feature === 'Vestuarios'">checkroom</mat-icon>
-              <mat-icon *ngIf="feature === 'Estacionamiento'">local_parking</mat-icon>
-              <mat-icon *ngIf="feature === 'Cafetería'">local_cafe</mat-icon>
-              <mat-icon *ngIf="feature === 'Techada'">roofing</mat-icon>
+            @for(feature of court.features; track feature){
+            <span class="feature-tag">
+              @if(feature === "Iluminación"){
+                <mat-icon>lightbulb</mat-icon>
+              }
+              @if(feature === "Vestuarios"){
+                <mat-icon>checkroom</mat-icon>
+              }
+              @if(feature === "Estacionamiento"){
+                <mat-icon>local_parking</mat-icon>
+              }
+              @if(feature === "Cafetería"){
+                <mat-icon>local_cafe</mat-icon>
+              }
+              @if(feature === "Techada"){
+              <mat-icon>roofing</mat-icon>
+              }
+              
               {{ feature }}
             </span>
+            }
           </div>
         </div>
+        }
 
         <div class="court-availability">
           <h3>Disponibilidad</h3>
-          <p>Esta cancha está disponible de lunes a domingo de 8:00 a 22:00 hrs.</p>
+          <p>
+            Esta cancha está disponible de lunes a domingo de 8:00 a 22:00 hrs.
+          </p>
         </div>
 
         <div class="court-actions">
-          <a routerLink="/reservations" class="reserve-button">Reservar ahora</a>
+          <a routerLink="/reservations" class="reserve-button"
+            >Reservar ahora</a
+          >
           <button class="contact-button">
             <mat-icon>phone</mat-icon>
             Contactar
@@ -79,4 +102,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

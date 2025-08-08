@@ -35,7 +35,7 @@ interface ReservationWithCourt extends Reservation {
     MatSnackBarModule
   ],
   templateUrl: './reservations.html',
-  styleUrl: './reservations.scss'
+  styleUrl: './reservations.css'
 })
 export class Reservations implements OnInit {
   reservationsWithCourts$!: Observable<ReservationWithCourt[]>;

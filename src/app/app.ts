@@ -7,7 +7,7 @@ import { Navigation } from './components/navigation/navigation';
   standalone: true,
   imports: [RouterOutlet, Navigation],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.css'
 })
 export class App {
   protected title = 'reservas-app';

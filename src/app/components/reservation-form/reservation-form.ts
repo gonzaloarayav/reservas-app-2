@@ -37,7 +37,7 @@ import { Reservation } from '../../models/reservation.model';
     MatSnackBarModule
   ],
   templateUrl: './reservation-form.html',
-  styleUrls: ['./reservation-form.scss']
+  styleUrls: ['./reservation-form.css']
 })
 export class ReservationForm implements OnInit {
   reservationForm!: FormGroup;

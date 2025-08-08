@@ -23,7 +23,7 @@ import { Court } from '../../models/court.model';
     RouterLink
   ],
   templateUrl: './court-detail.html',
-  styleUrls: ['./court-detail.scss']
+  styleUrls: ['./court-detail.css']
 })
 export class CourtDetail implements OnInit {
   court: Court | undefined;

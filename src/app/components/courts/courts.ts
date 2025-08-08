@@ -28,7 +28,7 @@ import { Court } from '../../models/court.model';
     FormsModule
   ],
   templateUrl: './courts.html',
-  styleUrl: './courts.scss'
+  styleUrl: './courts.css'
 })
 export class Courts implements OnInit {
   courts$!: Observable<Court[]>;

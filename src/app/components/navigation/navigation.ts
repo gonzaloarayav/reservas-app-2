@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
     MatMenuModule
   ],
   templateUrl: './navigation.html',
-  styleUrl: './navigation.scss'
+  styleUrl: './navigation.css'
 })
 export class Navigation {
   private userService = inject(UserService);

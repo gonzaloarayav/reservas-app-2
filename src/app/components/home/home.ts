@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule
   ],
   templateUrl: './home.html',
-  styleUrl: './home.scss'
+  styleUrl: './home.css'
 })
 export class Home {
   private courtService = inject(CourtService);

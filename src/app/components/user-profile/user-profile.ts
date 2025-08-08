@@ -31,7 +31,7 @@ import { Reservation } from '../../models/reservation.model';
     MatSnackBarModule
   ],
   templateUrl: './user-profile.html',
-  styleUrl: './user-profile.scss'
+  styleUrl: './user-profile.css'
 })
 export class UserProfile implements OnInit {
   user: User | null = null;

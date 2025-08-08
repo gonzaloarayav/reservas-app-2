@@ -3,24 +3,32 @@
   <div class="not-logged-in" *ngIf="!isLoggedIn">
     <mat-icon>account_circle</mat-icon>
     <h2>Inicia sesión para ver tus reservas</h2>
-    <p>Necesitas iniciar sesión para ver y gestionar tus reservas de canchas.</p>
+    <p>
+      Necesitas iniciar sesión para ver y gestionar tus reservas de canchas.
+    </p>
     <a mat-raised-button color="primary" routerLink="/login">
       Iniciar Sesión
     </a>
   </div>
 
   <!-- Logged in but no user ID -->
-  <div class="error-state" *ngIf="isLoggedIn && !userId">
+  @if(isLoggedIn && !userId){
+  <div class="error-state">
     <mat-icon>error</mat-icon>
     <h2>Error al cargar el perfil</h2>
-    <p>No se pudo obtener la información de tu perfil. Por favor, intenta cerrar sesión y volver a iniciar.</p>
+    <p>
+      No se pudo obtener la información de tu perfil. Por favor, intenta cerrar
+      sesión y volver a iniciar.
+    </p>
     <button mat-raised-button color="primary" (click)="loadReservations()">
       Reintentar
     </button>
   </div>
+  }
 
   <!-- Reservations content -->
-  <div class="reservations-content" *ngIf="isLoggedIn && userId">
+  @if(isLoggedIn && userId){
+  <div class="reservations-content">
     <div class="reservations-header">
       <h1>Mis Reservas</h1>
       <a mat-raised-button color="primary" routerLink="/reservations/new">
@@ -33,12 +41,20 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <span>Próximas</span>
-          <mat-icon matBadge="{{ (upcomingReservations$ | async)?.length || 0 }}" matBadgeColor="accent" class="tab-icon">event</mat-icon>
+          <mat-icon
+            matBadge="{{ (upcomingReservations$ | async)?.length || 0 }}"
+            matBadgeColor="accent"
+            class="tab-icon"
+            >event</mat-icon
+          >
         </ng-template>
-        
+
         <div class="tab-content">
           <!-- Empty state for upcoming reservations -->
-          <div class="empty-state" *ngIf="(upcomingReservations$ | async)?.length === 0">
+          <div
+            class="empty-state"
+            *ngIf="(upcomingReservations$ | async)?.length === 0"
+          >
             <mat-icon>event_busy</mat-icon>
             <h3>No tienes reservas próximas</h3>
             <p>¡Reserva una cancha ahora para comenzar a jugar!</p>
@@ -46,21 +62,28 @@
               Ver Canchas Disponibles
             </a>
           </div>
-          
+
           <!-- List of upcoming reservations -->
-          <div class="reservations-list" *ngIf="(upcomingReservations$ | async) as upcomingReservations">
+          <div
+            class="reservations-list"
+            *ngIf="(upcomingReservations$ | async) as upcomingReservations"
+          >
             <ng-container *ngIf="upcomingReservations.length > 0">
-              <mat-card class="reservation-card" *ngFor="let reservation of upcomingReservations">
+              @for(reservation of upcomingReservations; track reservation.id){
+              <mat-card class="reservation-card">
                 <div class="reservation-header">
                   <div class="reservation-court-info">
                     <h2 class="court-name">{{ reservation.court?.name }}</h2>
                     <p class="court-type">{{ reservation.court?.type }}</p>
                   </div>
-                  <div class="reservation-status" [ngClass]="getStatusClass(reservation.status)">
+                  <div
+                    class="reservation-status"
+                    [ngClass]="getStatusClass(reservation.status)"
+                  >
                     {{ getStatusText(reservation.status) }}
                   </div>
                 </div>
-                
+
                 <mat-card-content>
                   <div class="reservation-details">
                     <div class="detail-item">
@@ -69,7 +92,10 @@
                     </div>
                     <div class="detail-item">
                       <mat-icon>schedule</mat-icon>
-                      <span>{{ formatTime(reservation.startTime) }} - {{ formatTime(reservation.endTime) }}</span>
+                      <span
+                        >{{ formatTime(reservation.startTime) }} - {{
+                        formatTime(reservation.endTime) }}</span
+                      >
                     </div>
                     <div class="detail-item">
                       <mat-icon>location_on</mat-icon>
@@ -77,17 +103,28 @@
                     </div>
                   </div>
                 </mat-card-content>
-                
+
                 <mat-card-actions>
-                  <a mat-button color="primary" [routerLink]="['/courts', reservation.courtId]">
+                  <a
+                    mat-button
+                    color="primary"
+                    [routerLink]="['/courts', reservation.courtId]"
+                  >
                     <mat-icon>visibility</mat-icon> Ver Cancha
                   </a>
-                  <button mat-button color="warn" (click)="cancelReservation(reservation.id)" 
-                          *ngIf="reservation.status !== 'cancelled' && reservation.status !== 'completed'">
+                  @if(reservation.status !== 'cancelled' && reservation.status
+                  !== 'completed'){
+                  <button
+                    mat-button
+                    color="warn"
+                    (click)="cancelReservation(reservation.id)"
+                  >
                     <mat-icon>cancel</mat-icon> Cancelar
                   </button>
+                  }
                 </mat-card-actions>
               </mat-card>
+              }
             </ng-container>
           </div>
         </div>
@@ -98,7 +135,7 @@
           <span>Historial</span>
           <mat-icon class="tab-icon">history</mat-icon>
         </ng-template>
-        
+
         <div class="tab-content">
           <!-- Past reservations content -->
           <ng-container *ngIf="(pastReservations$ | async) as pastReservations">
@@ -106,22 +143,29 @@
             <div class="empty-state" *ngIf="pastReservations.length === 0">
               <mat-icon>history</mat-icon>
               <h3>No tienes reservas pasadas</h3>
-              <p>Tu historial de reservas aparecerá aquí una vez que hayas completado alguna reserva.</p>
+              <p>
+                Tu historial de reservas aparecerá aquí una vez que hayas
+                completado alguna reserva.
+              </p>
             </div>
-            
+
             <!-- List of past reservations -->
             <div class="reservations-list" *ngIf="pastReservations.length > 0">
-              <mat-card class="reservation-card past-reservation" *ngFor="let reservation of pastReservations">
+              @for(reservation of pastReservations;track reservation.id){
+              <mat-card class="reservation-card past-reservation">
                 <div class="reservation-header">
                   <div class="reservation-court-info">
                     <h2 class="court-name">{{ reservation.court?.name }}</h2>
                     <p class="court-type">{{ reservation.court?.type }}</p>
                   </div>
-                  <div class="reservation-status" [ngClass]="getStatusClass(reservation.status)">
+                  <div
+                    class="reservation-status"
+                    [ngClass]="getStatusClass(reservation.status)"
+                  >
                     {{ getStatusText(reservation.status) }}
                   </div>
                 </div>
-                
+
                 <mat-card-content>
                   <div class="reservation-details">
                     <div class="detail-item">
@@ -130,7 +174,10 @@
                     </div>
                     <div class="detail-item">
                       <mat-icon>schedule</mat-icon>
-                      <span>{{ formatTime(reservation.startTime) }} - {{ formatTime(reservation.endTime) }}</span>
+                      <span
+                        >{{ formatTime(reservation.startTime) }} - {{
+                        formatTime(reservation.endTime) }}</span
+                      >
                     </div>
                     <div class="detail-item">
                       <mat-icon>location_on</mat-icon>
@@ -138,20 +185,31 @@
                     </div>
                   </div>
                 </mat-card-content>
-                
+
                 <mat-card-actions>
-                  <a mat-button color="primary" [routerLink]="['/courts', reservation.courtId]">
+                  <a
+                    mat-button
+                    color="primary"
+                    [routerLink]="['/courts', reservation.courtId]"
+                  >
                     <mat-icon>visibility</mat-icon> Ver Cancha
                   </a>
-                  <a mat-button color="accent" [routerLink]="['/reservations/new']" [queryParams]="{courtId: reservation.courtId}">
+                  <a
+                    mat-button
+                    color="accent"
+                    [routerLink]="['/reservations/new']"
+                    [queryParams]="{courtId: reservation.courtId}"
+                  >
                     <mat-icon>replay</mat-icon> Reservar de Nuevo
                   </a>
                 </mat-card-actions>
               </mat-card>
+              }
             </div>
           </ng-container>
         </div>
       </mat-tab>
     </mat-tab-group>
   </div>
+  }
 </div>

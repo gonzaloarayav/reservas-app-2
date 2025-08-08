@@ -9,7 +9,11 @@
     <div class="filters-form">
       <mat-form-field appearance="outline">
         <mat-label>Buscar canchas</mat-label>
-        <input matInput [(ngModel)]="searchQuery" placeholder="Nombre o ubicación">
+        <input
+          matInput
+          [(ngModel)]="searchQuery"
+          placeholder="Nombre o ubicación"
+        />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
@@ -17,7 +21,9 @@
         <mat-label>Tipo de cancha</mat-label>
         <mat-select [(ngModel)]="selectedType">
           <mat-option value="">Todos los tipos</mat-option>
-          <mat-option *ngFor="let type of courtTypes" [value]="type">{{ type }}</mat-option>
+          @for(type of courtTypes; track type){
+          <mat-option [value]="type">{{ type }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
@@ -34,27 +40,47 @@
 
   <!-- Courts List -->
   <div class="courts-grid">
-    <mat-card class="court-card" *ngFor="let court of filteredCourts$ | async">
-      <img mat-card-image [src]="court.imageUrl || 'assets/images/default-court.jpg'" alt="{{ court.name }}">
+    @for(court of filteredCourts$ | async; track court){
+    <mat-card class="court-card">
+      <img
+        mat-card-image
+        [src]="court.imageUrl || 'assets/images/default-court.jpg'"
+        alt="{{ court.name }}"
+      />
       <mat-card-content>
         <h2 class="court-name">{{ court.name }}</h2>
         <p class="court-type">{{ court.type | titlecase }}</p>
-        <p class="court-location"><mat-icon>location_on</mat-icon> {{ court.location }}</p>
-        <p class="court-price"><mat-icon>attach_money</mat-icon> ${{ court.pricePerHour }} / hora</p>
-        
-        <div class="court-features" *ngIf="court.features && court.features.length > 0">
-          <span class="feature-tag" *ngFor="let feature of court.features">{{ feature }}</span>
+        <p class="court-location">
+          <mat-icon>location_on</mat-icon> {{ court.location }}
+        </p>
+        <p class="court-price">
+          <mat-icon>attach_money</mat-icon> ${{ court.pricePerHour }} / hora
+        </p>
+
+        @if(court.features && court.features.length > 0){
+        <div class="court-features">
+          @for(feature of court.features; track feature){
+          <span class="feature-tag">{{ feature }}</span>
+
+          }
         </div>
+        }
       </mat-card-content>
       <mat-card-actions>
         <a mat-button color="primary" [routerLink]="['/courts', court.id]">
           <mat-icon>visibility</mat-icon> Ver Detalles
         </a>
-        <a mat-raised-button color="accent" [routerLink]="['/reservations/new']" [queryParams]="{courtId: court.id}">
+        <a
+          mat-raised-button
+          color="accent"
+          [routerLink]="['/reservations/new']"
+          [queryParams]="{courtId: court.id}"
+        >
           <mat-icon>event_available</mat-icon> Reservar
         </a>
       </mat-card-actions>
     </mat-card>
+    }
   </div>
 
   <!-- Empty State -->
