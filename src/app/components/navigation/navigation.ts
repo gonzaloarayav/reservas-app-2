@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-navigation',
@@ -25,25 +26,45 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navigation.html',
   styleUrl: './navigation.css'
 })
-export class Navigation {
+export class Navigation implements OnInit, OnDestroy {
   private userService = inject(UserService);
-  private authService = inject(AuthService);
+  private router = inject(Router);
   
-  get currentUser() {
-    return this.authService.getCurrentUser();
+  currentUser$: Observable<User | null>;
+  currentUser: User | null = null;
+  private subscription: Subscription = new Subscription();
+
+  constructor() {
+    this.currentUser$ = this.userService.getCurrentUser$();
+  }
+
+  ngOnInit() {
+    this.subscription.add(
+      this.currentUser$.subscribe(user => {
+        this.currentUser = user;
+        console.log('Navigation - currentUser actualizado:', user);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   isLoggedIn() {
-    return this.authService.isLoggedIn();
+    const loggedIn = this.currentUser !== null;
+    console.log('Navigation - isLoggedIn:', loggedIn);
+    return loggedIn;
   }
 
   isAdmin() {
-    return this.authService.isAdmin();
+    return this.currentUser?.role === 'admin';
   }
 
   logout() {
-    this.authService.logout();
-    // Redirigir a la página de inicio después de cerrar sesión
-    window.location.href = '/';
+    this.userService.logout().subscribe(() => {
+      // Redirigir a la página de inicio después de cerrar sesión
+      this.router.navigate(['/']);
+    });
   }
 }

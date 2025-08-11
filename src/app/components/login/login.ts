@@ -7,7 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class Login {
   errorMessage = '';
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -44,17 +45,26 @@ export class Login {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.login(this.email, this.password).subscribe({
-      next: (user) => {
+    this.userService.login(this.email, this.password).subscribe({
+      next: (user: User | null) => {
         this.isLoading = false;
-        if (user.role === 'admin') {
-          this.router.navigate(['/admin']);
+        console.log('Respuesta del login:', user);
+        
+        if (user) {
+          console.log('Login exitoso, redirigiendo...');
+          if (user.role === 'admin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/']);
+          }
         } else {
-          this.router.navigate(['/']);
+          console.log('Login fallido - credenciales incorrectas');
+          this.errorMessage = 'Email o contraseña incorrectos';
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
+        console.error('Error en login:', error);
         this.errorMessage = 'Error al iniciar sesión';
       }
     });

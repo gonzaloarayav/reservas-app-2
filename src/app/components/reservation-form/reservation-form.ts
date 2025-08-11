@@ -78,12 +78,16 @@ export class ReservationForm implements OnInit {
     this.initForm();
     this.loadCourts();
 
-    // Check if a court ID was passed in the URL
-    this.route.queryParams.subscribe(params => {
+    // Check if a court ID was passed in the URL (either as route param or query param)
+    this.route.params.subscribe(params => {
       this.preselectedCourtId = params['courtId'] || null;
-      if (this.preselectedCourtId && this.courts.length > 0) {
-        this.onCourtChange(this.preselectedCourtId);
-        this.reservationForm.patchValue({ courtId: this.preselectedCourtId });
+      this.selectPreselectedCourt();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (!this.preselectedCourtId) {
+        this.preselectedCourtId = params['courtId'] || null;
+        this.selectPreselectedCourt();
       }
     });
   }
@@ -126,8 +130,7 @@ export class ReservationForm implements OnInit {
         
         // If there's a preselected court ID from the URL, select it
         if (this.preselectedCourtId) {
-          this.onCourtChange(this.preselectedCourtId);
-          this.reservationForm.patchValue({ courtId: this.preselectedCourtId });
+          this.selectPreselectedCourt();
         }
       },
       error: (err) => {
@@ -136,6 +139,13 @@ export class ReservationForm implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private selectPreselectedCourt(): void {
+    if (this.preselectedCourtId && this.courts.length > 0) {
+      this.onCourtChange(this.preselectedCourtId);
+      this.reservationForm.patchValue({ courtId: this.preselectedCourtId });
+    }
   }
 
   onCourtChange(courtId: string): void {

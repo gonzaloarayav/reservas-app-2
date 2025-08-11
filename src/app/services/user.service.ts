@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -8,14 +8,15 @@ import { User } from '../models/user.model';
 export class UserService {
   private users: User[] = [];
   private currentUser: User | null = null;
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
 
   constructor() {
     // Datos de ejemplo para desarrollo
     this.users = [
       {
         id: '1',
-        name: 'Juan Pérez',
-        email: 'juan@example.com',
+        name: 'Usuario Demo',
+        email: 'usuario@reservas.com',
         phone: '123456789',
         role: 'user',
         profileImageUrl: 'assets/images/user1.jpg',
@@ -24,8 +25,8 @@ export class UserService {
       },
       {
         id: '2',
-        name: 'Admin',
-        email: 'admin@example.com',
+        name: 'Admin Demo',
+        email: 'admin@reservas.com',
         phone: '987654321',
         role: 'admin',
         profileImageUrl: 'assets/images/admin.jpg',
@@ -34,8 +35,9 @@ export class UserService {
       }
     ];
 
-    // Establecer usuario actual para desarrollo
-    this.currentUser = this.users[0];
+    // Para desarrollo: iniciar sin usuario logueado
+    // Descomenta la siguiente línea para auto-login durante desarrollo
+    // this.currentUser = this.users[0];
   }
 
   getUsers(): Observable<User[]> {
@@ -50,23 +52,48 @@ export class UserService {
   getCurrentUser(): User | null {
     return this.currentUser;
   }
+
+  getCurrentUser$(): Observable<User | null> {
+    return this.currentUserSubject.asObservable();
+  }
   
   isLoggedIn(): boolean {
     return this.currentUser !== null;
   }
 
   login(email: string, password: string): Observable<User | null> {
-    // Simulación de login
+    console.log('Intentando login con:', { email, password });
+    console.log('Usuarios disponibles:', this.users.map(u => ({ email: u.email, name: u.name })));
+    
+    // Simulación de login con validación básica de contraseña
     const user = this.users.find(u => u.email === email);
+    
     if (user) {
-      this.currentUser = user;
-      return of(user);
+      // Validación simple de contraseña para demo
+      const validPasswords = {
+        'usuario@reservas.com': 'user123',
+        'admin@reservas.com': 'admin123'
+      };
+      
+      if (validPasswords[email as keyof typeof validPasswords] === password) {
+         this.currentUser = user;
+         this.currentUserSubject.next(user);
+         console.log('Login exitoso para:', user.name);
+         return of(user);
+       } else {
+        console.log('Contraseña incorrecta para:', email);
+        return of(null);
+      }
     }
+    
+    console.log('Usuario no encontrado:', email);
     return of(null);
   }
 
   logout(): Observable<boolean> {
     this.currentUser = null;
+    this.currentUserSubject.next(null);
+    console.log('Logout realizado');
     return of(true);
   }
 

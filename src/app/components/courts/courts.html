@@ -70,12 +70,25 @@
         <a mat-button color="primary" [routerLink]="['/courts', court.id]">
           <mat-icon>visibility</mat-icon> Ver Detalles
         </a>
+        
+        <!-- Botón de reserva para usuarios logueados -->
         <a
+          *ngIf="isLoggedIn()"
           mat-raised-button
           color="accent"
           [routerLink]="['/reserve', court.id]"
         >
           <mat-icon>event_available</mat-icon> Reservar
+        </a>
+        
+        <!-- Mensaje para usuarios no logueados -->
+        <a
+          *ngIf="!isLoggedIn()"
+          mat-raised-button
+          color="primary"
+          routerLink="/login"
+        >
+          <mat-icon>login</mat-icon> Iniciar Sesión para Reservar
         </a>
       </mat-card-actions>
     </mat-card>

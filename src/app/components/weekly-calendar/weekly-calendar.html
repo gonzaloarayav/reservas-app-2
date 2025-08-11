@@ -1,0 +1,90 @@
+<div class="weekly-calendar">
+  <!-- Header con navegación de semanas -->
+  <div class="calendar-header">
+    <div class="week-navigation">
+      <button class="nav-btn" (click)="previousWeek()">
+        <span>‹</span>
+      </button>
+      <h2 class="week-range">{{ getCurrentWeekRange() }}</h2>
+      <button class="nav-btn" (click)="nextWeek()">
+        <span>›</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de canchas con sus calendarios -->
+  <div class="courts-calendar-container">
+    <div *ngFor="let court of courts" class="court-section">
+      <div class="court-header">
+        <h3>{{ court.name }}</h3>
+        <span class="court-type">{{ court.type }}</span>
+        <span class="court-price">${{ court.pricePerHour }}/hora</span>
+      </div>
+      
+      <!-- Calendario para esta cancha -->
+      <div class="court-calendar">
+        <!-- Headers de días -->
+        <div class="calendar-grid">
+          <div class="time-header">Hora</div>
+          <div *ngFor="let day of currentWeek" class="day-header" [class.today]="day.isToday">
+            <div class="day-name">{{ day.dayName }}</div>
+            <div class="day-number">{{ day.dayNumber }}</div>
+          </div>
+
+          <!-- Filas de horarios -->
+          <ng-container *ngFor="let timeSlot of timeSlots">
+            <div class="time-slot-header">{{ timeSlot.time }}</div>
+            
+            <div *ngFor="let day of currentWeek" 
+                 class="calendar-cell"
+                 [class]="getCellClassForCourtAndTime(court, day, timeSlot)"
+                 (click)="onCellClickForCourtAndTime(court, day, timeSlot)"
+                 [title]="getReservationInfoForCourtAndTime(court, day, timeSlot)">
+              
+              <div class="cell-content">
+                <div class="cell-status">
+                  <span *ngIf="isReservedForCourtAndTime(court, day, timeSlot)" class="reserved-indicator">
+                    Ocupado
+                  </span>
+                  <span *ngIf="isAvailableForCourtAndTime(court, day, timeSlot)" class="available-indicator">
+                    Disponible
+                  </span>
+                  <span *ngIf="!isAvailableForCourtAndTime(court, day, timeSlot) && !isReservedForCourtAndTime(court, day, timeSlot)" class="unavailable-indicator">
+                    No disponible
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leyenda -->
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <div class="legend-color available"></div>
+      <span>Disponible</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color reserved"></div>
+      <span>Ocupado</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color unavailable"></div>
+      <span>No disponible</span>
+    </div>
+  </div>
+
+  <!-- Información adicional -->
+  <div class="calendar-info">
+    <p><strong>Instrucciones:</strong></p>
+    <ul>
+      <li>Haz clic en una celda verde para reservar</li>
+      <li>Las celdas rojas están ocupadas</li>
+      <li>Las celdas grises no están disponibles</li>
+      <li>Solo se pueden reservar horarios futuros</li>
+    </ul>
+  </div>
+</div>

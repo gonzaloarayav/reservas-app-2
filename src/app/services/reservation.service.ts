@@ -10,12 +10,18 @@ export class ReservationService {
 
   constructor() {
     // Datos de ejemplo para desarrollo
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const dayAfterTomorrow = new Date(today);
+    dayAfterTomorrow.setDate(today.getDate() + 2);
+
     this.reservations = [
       {
         id: '1',
         courtId: '1',
         userId: '1',
-        date: new Date('2023-11-15'),
+        date: today,
         startTime: '10:00',
         endTime: '11:00',
         status: 'confirmed',
@@ -26,10 +32,43 @@ export class ReservationService {
         id: '2',
         courtId: '2',
         userId: '1',
-        date: new Date('2023-11-16'),
+        date: today,
         startTime: '15:00',
         endTime: '16:00',
-        status: 'pending',
+        status: 'confirmed',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '3',
+        courtId: '1',
+        userId: '2',
+        date: tomorrow,
+        startTime: '09:00',
+        endTime: '10:00',
+        status: 'confirmed',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '4',
+        courtId: '3',
+        userId: '1',
+        date: tomorrow,
+        startTime: '18:00',
+        endTime: '19:00',
+        status: 'confirmed',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '5',
+        courtId: '2',
+        userId: '2',
+        date: dayAfterTomorrow,
+        startTime: '11:00',
+        endTime: '12:00',
+        status: 'confirmed',
         createdAt: new Date(),
         updatedAt: new Date()
       }

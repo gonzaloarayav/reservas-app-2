@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 
 import { CourtService } from '../../services/court.service';
+import { UserService } from '../../services/user.service';
 import { Court } from '../../models/court.model';
 
 @Component({
@@ -40,6 +41,11 @@ export class Courts implements OnInit {
   searchQuery: string = '';
   
   private courtService = inject(CourtService);
+  private userService = inject(UserService);
+
+  isLoggedIn() {
+    return this.userService.isLoggedIn();
+  }
   
   ngOnInit(): void {
     this.courts$ = this.courtService.getCourts();
