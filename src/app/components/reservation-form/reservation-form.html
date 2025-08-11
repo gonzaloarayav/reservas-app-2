@@ -51,8 +51,17 @@
 
         <div class="selected-court" *ngIf="selectedCourt">
           <mat-card>
-            <div class="court-image">
-              <img [src]="selectedCourt.imageUrl || 'assets/images/default-court.jpg'" [alt]="selectedCourt.name">
+            <div class="court-image-container">
+              <img 
+                [src]="selectedCourt.imageUrl" 
+                [alt]="selectedCourt.name"
+                class="court-image"
+                (error)="onImageError($event)"
+              >
+              <div class="court-image-fallback" style="display: none;">
+                <mat-icon>sports_tennis</mat-icon>
+                <span>{{ selectedCourt.type | titlecase }}</span>
+              </div>
             </div>
             <div class="court-info">
               <h3>{{ selectedCourt.name }}</h3>

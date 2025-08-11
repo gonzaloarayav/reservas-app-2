@@ -32,7 +32,7 @@ export class CourtService {
         description: 'Cancha secundaria de tenis con superficie dura',
         pricePerHour: 20,
         available: true,
-        imageUrl: 'assets/images/court2.jpg',
+        imageUrl: 'assets/images/court2-invalid.jpg',
         features: ['Iluminación', 'Vestuarios'],
         createdAt: new Date(),
         updatedAt: new Date()

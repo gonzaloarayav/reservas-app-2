@@ -64,4 +64,20 @@ export class CourtDetail implements OnInit {
       }
     });
   }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    const container = imgElement.parentElement;
+    
+    if (container) {
+      // Ocultar la imagen rota
+      imgElement.style.display = 'none';
+      
+      // Mostrar el fallback
+      const fallback = container.querySelector('.court-image-fallback') as HTMLElement;
+      if (fallback) {
+        fallback.style.display = 'flex';
+      }
+    }
+  }
 }

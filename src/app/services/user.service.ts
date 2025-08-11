@@ -19,7 +19,7 @@ export class UserService {
         email: 'usuario@reservas.com',
         phone: '123456789',
         role: 'user',
-        profileImageUrl: 'assets/images/user1.jpg',
+        profileImageUrl: 'assets/images/user1-invalid.jpg',
         createdAt: new Date(),
         updatedAt: new Date()
       },

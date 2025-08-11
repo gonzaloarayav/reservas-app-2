@@ -1,19 +1,96 @@
 <div class="home-container">
-  <!-- Hero Section -->
+  <!-- Hero Section with Carousel -->
   <section class="hero-section">
-    <div class="hero-content">
-      <h1>Reserva tu cancha de tenis fácilmente</h1>
-      <p class="hero-subtitle">
-        Sistema de reservas online para canchas deportivas
-      </p>
-      <div class="hero-actions">
-        <a mat-raised-button color="primary" routerLink="/courts">
-          <mat-icon>sports_tennis</mat-icon> Ver Canchas
-        </a>
-        <a mat-raised-button color="accent" routerLink="/reservations">
-          <mat-icon>event</mat-icon> Mis Reservas
-        </a>
+    <div class="hero-carousel" (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
+      <div class="hero-slides-container" 
+             [style.transform]="'translateX(-' + (currentSlide * 33.333) + '%)'">
+        @for(slide of heroSlides; track $index; let i = $index) {
+          <div class="hero-slide" [style.background-image]="'url(' + slide.image + ')'">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <h1>{{ slide.title }}</h1>
+              <p class="hero-subtitle">{{ slide.subtitle }}</p>
+              <div class="hero-actions">
+                <a mat-raised-button color="primary" routerLink="/courts">
+                  <mat-icon>sports_tennis</mat-icon> {{ slide.primaryAction }}
+                </a>
+                <a mat-raised-button color="accent" routerLink="/reservations">
+                  <mat-icon>event</mat-icon> {{ slide.secondaryAction }}
+                </a>
+              </div>
+            </div>
+          </div>
+        }
       </div>
+      
+      <!-- Carousel Controls -->
+      <div class="carousel-controls">
+        <button mat-icon-button class="carousel-btn prev-btn" (click)="prevSlide()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button class="carousel-btn next-btn" (click)="nextSlide()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        @for(slide of heroSlides; track $index; let i = $index) {
+          <button 
+            class="indicator" 
+            [class.active]="currentSlide === i"
+            (click)="goToSlide(i)">
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section class="news-section">
+    <h2 class="section-title">Noticias del Club</h2>
+    <div class="news-grid">
+      @for(news of latestNews$ | async; track news.id){
+      <mat-card class="news-card">
+        <div class="news-image-container">
+          <img
+            mat-card-image
+            [src]="news.imageUrl"
+            alt="{{ news.title }}"
+            class="news-image"
+            (error)="onImageError($event)"
+          />
+          <div class="news-image-fallback" style="display: none;">
+            <mat-icon>article</mat-icon>
+            <span>{{ getCategoryLabel(news.category) }}</span>
+          </div>
+        </div>
+        <mat-card-content>
+          <div class="news-header">
+            <mat-chip [color]="getCategoryColor(news.category)">
+              {{ getCategoryLabel(news.category) }}
+            </mat-chip>
+            <span class="news-date">{{ news.publishDate | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <h3 class="news-title">{{ news.title }}</h3>
+          <p class="news-summary">{{ news.summary }}</p>
+          <div class="news-author">
+            <mat-icon>person</mat-icon>
+            <span>{{ news.author }}</span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>read_more</mat-icon> Leer Más
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      }
+    </div>
+    <div class="view-all-container">
+      <a mat-raised-button color="primary" routerLink="/news">
+        Ver Todas las Noticias
+      </a>
     </div>
   </section>
 
@@ -39,11 +116,19 @@
     <div class="courts-grid">
       @for(court of featuredCourts$ | async; track court){
       <mat-card class="court-card">
-        <img
-          mat-card-image
-          [src]="court.imageUrl || 'assets/images/default-court.jpg'"
-          alt="{{ court.name }}"
-        />
+        <div class="court-image-container">
+          <img
+            mat-card-image
+            [src]="court.imageUrl"
+            alt="{{ court.name }}"
+            class="court-image"
+            (error)="onImageError($event)"
+          />
+          <div class="court-image-fallback" style="display: none;">
+            <mat-icon>sports_tennis</mat-icon>
+            <span>{{ court.type | titlecase }}</span>
+          </div>
+        </div>
         <mat-card-content>
           <h3 class="court-name">{{ court.name }}</h3>
           <p class="court-type">{{ court.type | titlecase }}</p>

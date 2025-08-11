@@ -37,10 +37,15 @@
       <mat-card class="profile-card">
         <div class="profile-image-container">
           <img
-            [src]="user.profileImageUrl || 'assets/images/default-user.jpg'"
+            [src]="user.profileImageUrl"
             alt="Foto de perfil"
             class="profile-image"
+            (error)="onImageError($event)"
           />
+          <div class="profile-image-fallback" style="display: none;">
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ user.name | slice:0:2 | uppercase }}</span>
+          </div>
           <div class="profile-image-overlay" *ngIf="isEditing">
             <mat-icon>photo_camera</mat-icon>
             <span>Cambiar foto</span>

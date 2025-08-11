@@ -42,11 +42,19 @@
   <div class="courts-grid">
     @for(court of filteredCourts$ | async; track court){
     <mat-card class="court-card">
-      <img
-        mat-card-image
-        [src]="court.imageUrl || 'assets/images/default-court.jpg'"
-        alt="{{ court.name }}"
-      />
+      <div class="court-image-container">
+        <img
+          mat-card-image
+          [src]="court.imageUrl"
+          alt="{{ court.name }}"
+          class="court-image"
+          (error)="onImageError($event)"
+        />
+        <div class="court-image-fallback" style="display: none;">
+          <mat-icon>sports_tennis</mat-icon>
+          <span>{{ court.type | titlecase }}</span>
+        </div>
+      </div>
       <mat-card-content>
         <h2 class="court-name">{{ court.name }}</h2>
         <p class="court-type">{{ court.type | titlecase }}</p>

@@ -128,14 +128,50 @@
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
-.court-card img {
+.court-image-container {
+  position: relative;
   height: 220px;
+  overflow: hidden;
+}
+
+.court-card img,
+.court-image {
+  height: 220px;
+  width: 100%;
   object-fit: cover;
   transition: var(--transition);
 }
 
-.court-card:hover img {
+.court-card:hover img,
+.court-card:hover .court-image {
   transform: scale(1.05);
+}
+
+.court-image-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  background: linear-gradient(135deg, #4caf50, #2196f3);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.court-image-fallback mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.court-image-fallback span {
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .court-card mat-card-content {

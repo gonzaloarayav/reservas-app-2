@@ -63,4 +63,19 @@ export class Courts implements OnInit {
     this.selectedType = '';
     this.filteredCourts$ = this.courts$;
   }
+
+  onImageError(event: any): void {
+    // Simplemente ocultar la imagen y mostrar el fallback
+    const imgElement = event.target;
+    imgElement.style.display = 'none';
+    
+    // Buscar el contenedor de fallback y mostrarlo
+    const container = imgElement.closest('.court-image-container');
+    if (container) {
+      const fallback = container.querySelector('.court-image-fallback');
+      if (fallback) {
+        (fallback as HTMLElement).style.display = 'flex';
+      }
+    }
+  }
 }

@@ -29,7 +29,16 @@
 
     <div class="court-detail-content">
       <div class="court-image-container">
-        <img [src]="court.imageUrl" [alt]="court.name" class="court-image" />
+        <img 
+          [src]="court.imageUrl" 
+          [alt]="court.name" 
+          class="court-image"
+          (error)="onImageError($event)"
+        />
+        <div class="court-image-fallback" style="display: none;">
+          <mat-icon>sports_tennis</mat-icon>
+          <span>{{ court.type | titlecase }}</span>
+        </div>
       </div>
 
       <div class="court-info-container">
