@@ -5,6 +5,7 @@ export interface User {
   phone?: string;
   password?: string; // Solo para autenticación, no para almacenamiento
   role: 'admin' | 'user';
+  membershipType: 'socio' | 'no_socio';
   profileImageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;

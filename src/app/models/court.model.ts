@@ -5,6 +5,7 @@ export interface Court {
   location: string;
   description?: string;
   pricePerHour: number;
+  lightingFeePerHour: number;
   available: boolean;
   imageUrl?: string;
   features?: string[];

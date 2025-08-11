@@ -404,6 +404,39 @@
       font-weight: 600;
       color: var(--primary);
     }
+
+    .court-lighting {
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      margin: 0.25rem 0 0;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      mat-icon {
+        font-size: 16px;
+        height: 16px;
+        width: 16px;
+        color: #ffc107;
+      }
+    }
+
+    .member-benefit {
+      color: var(--primary);
+      font-size: 0.9375rem;
+      margin: 0.25rem 0 0;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 600;
+
+      mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+        color: #ffc107;
+      }
+    }
   }
 }
 
@@ -444,6 +477,34 @@
 
       &.price {
         font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      &.member-price {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--primary);
+        background: linear-gradient(45deg, var(--primary), #ffc107);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    &.total {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+
+      .label {
+        font-weight: 600;
+        color: var(--on-surface);
+        font-size: 1rem;
+      }
+
+      .value.price {
+        font-size: 1.25rem;
         font-weight: 700;
         color: var(--primary);
       }

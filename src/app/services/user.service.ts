@@ -15,10 +15,11 @@ export class UserService {
     this.users = [
       {
         id: '1',
-        name: 'Usuario Demo',
+        name: 'Usuario Demo (Socio)',
         email: 'usuario@reservas.com',
         phone: '123456789',
         role: 'user',
+        membershipType: 'socio',
         profileImageUrl: 'assets/images/user1-invalid.jpg',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -29,7 +30,19 @@ export class UserService {
         email: 'admin@reservas.com',
         phone: '987654321',
         role: 'admin',
+        membershipType: 'socio',
         profileImageUrl: 'assets/images/admin.jpg',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '3',
+        name: 'Usuario No Socio',
+        email: 'nosocio@reservas.com',
+        phone: '555666777',
+        role: 'user',
+        membershipType: 'no_socio',
+        profileImageUrl: 'assets/images/user2.jpg',
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -72,7 +85,8 @@ export class UserService {
       // Validación simple de contraseña para demo
       const validPasswords = {
         'usuario@reservas.com': 'user123',
-        'admin@reservas.com': 'admin123'
+        'admin@reservas.com': 'admin123',
+        'nosocio@reservas.com': 'nosocio123'
       };
       
       if (validPasswords[email as keyof typeof validPasswords] === password) {

@@ -101,6 +101,13 @@
                       <mat-icon>location_on</mat-icon>
                       <span>{{ reservation.court?.location }}</span>
                     </div>
+                    <div class="detail-item" *ngIf="reservation.totalPrice">
+                      <mat-icon>attach_money</mat-icon>
+                      <span>${{ reservation.totalPrice }}</span>
+                      <span *ngIf="reservation.hasLighting" class="lighting-indicator">
+                        <mat-icon>lightbulb</mat-icon>
+                      </span>
+                    </div>
                   </div>
                 </mat-card-content>
 
@@ -182,6 +189,13 @@
                     <div class="detail-item">
                       <mat-icon>location_on</mat-icon>
                       <span>{{ reservation.court?.location }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="reservation.totalPrice">
+                      <mat-icon>attach_money</mat-icon>
+                      <span>${{ reservation.totalPrice }}</span>
+                      <span *ngIf="reservation.hasLighting" class="lighting-indicator">
+                        <mat-icon>lightbulb</mat-icon>
+                      </span>
                     </div>
                   </div>
                 </mat-card-content>

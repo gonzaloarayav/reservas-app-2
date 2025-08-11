@@ -17,58 +17,81 @@ export class ReservationService {
     dayAfterTomorrow.setDate(today.getDate() + 2);
 
     this.reservations = [
+      // Reservas de usuario socio (gratis)
       {
         id: '1',
         courtId: '1',
-        userId: '1',
+        userId: '1', // Usuario socio
         date: today,
         startTime: '10:00',
-        endTime: '11:00',
+        endTime: '11:30',
         status: 'confirmed',
+        basePrice: 0,
+        lightingFee: 0,
+        totalPrice: 0,
+        hasLighting: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: '2',
         courtId: '2',
-        userId: '1',
+        userId: '1', // Usuario socio
         date: today,
         startTime: '15:00',
-        endTime: '16:00',
+        endTime: '16:30',
         status: 'confirmed',
+        basePrice: 0,
+        lightingFee: 0,
+        totalPrice: 0,
+        hasLighting: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      // Reservas de admin socio (gratis)
       {
         id: '3',
         courtId: '1',
-        userId: '2',
+        userId: '2', // Admin socio
         date: tomorrow,
         startTime: '09:00',
-        endTime: '10:00',
+        endTime: '10:30',
         status: 'confirmed',
+        basePrice: 0,
+        lightingFee: 0,
+        totalPrice: 0,
+        hasLighting: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      // Reservas de usuario no socio (con precio)
       {
         id: '4',
         courtId: '3',
-        userId: '1',
+        userId: '3', // Usuario no socio
         date: tomorrow,
         startTime: '18:00',
-        endTime: '19:00',
+        endTime: '19:30',
         status: 'confirmed',
+        basePrice: 45,
+        lightingFee: 15,
+        totalPrice: 60,
+        hasLighting: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: '5',
         courtId: '2',
-        userId: '2',
+        userId: '3', // Usuario no socio
         date: dayAfterTomorrow,
         startTime: '11:00',
-        endTime: '12:00',
+        endTime: '12:30',
         status: 'confirmed',
+        basePrice: 30,
+        lightingFee: 0,
+        totalPrice: 30,
+        hasLighting: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }

@@ -32,8 +32,11 @@
           </div>
 
           <!-- Filas de horarios -->
-          <ng-container *ngFor="let timeSlot of timeSlots">
-            <div class="time-slot-header">{{ timeSlot.time }}</div>
+          <ng-container *ngFor="let timeSlot of timeSlots; let i = index">
+            <div class="time-slot-header">
+              <div class="time-start">{{ timeSlot.time }}</div>
+              <div class="time-duration">1.5h</div>
+            </div>
             
             <div *ngFor="let day of currentWeek" 
                  class="calendar-cell"
@@ -81,10 +84,95 @@
   <div class="calendar-info">
     <p><strong>Instrucciones:</strong></p>
     <ul>
-      <li>Haz clic en una celda verde para reservar</li>
+      <li>Cada bloque representa 1.5 horas de reserva</li>
+      <li><strong>¡Un solo click en una celda verde reserva automáticamente!</strong></li>
       <li>Las celdas rojas están ocupadas</li>
       <li>Las celdas grises no están disponibles</li>
       <li>Solo se pueden reservar horarios futuros</li>
+      <li>También puedes usar "Nueva Reserva" para más opciones</li>
     </ul>
+  </div>
+
+  <!-- Notificaciones -->
+  <div *ngIf="showNotification" class="notification" [class.success]="notificationType === 'success'" [class.error]="notificationType === 'error'">
+    <div class="notification-content">
+      <span class="notification-icon">
+        {{ notificationType === 'success' ? '✅' : '❌' }}
+      </span>
+      <span class="notification-message">{{ notificationMessage }}</span>
+      <button class="notification-close" (click)="hideNotification()">×</button>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de reserva -->
+  <div *ngIf="showReservationModal" class="modal-overlay" (click)="closeReservationModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirmar Reserva</h3>
+        <button class="close-btn" (click)="closeReservationModal()">×</button>
+      </div>
+      
+      <div class="modal-body" *ngIf="getReservationSummary() as summary">
+        <div class="reservation-details">
+          <div class="detail-row">
+            <span class="label">Cancha:</span>
+            <span class="value">{{ summary.courtName }} ({{ summary.courtType }})</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="label">Fecha:</span>
+            <span class="value">{{ summary.date }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="label">Horario:</span>
+            <span class="value">{{ summary.startTime }} - {{ summary.endTime }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="label">Duración:</span>
+            <span class="value">{{ summary.duration }}</span>
+          </div>
+          
+          <!-- Información de precios -->
+          <div class="price-section">
+            <div *ngIf="summary.isMember" class="member-benefit">
+              <div class="member-icon">👑</div>
+              <div class="member-text">
+                <strong>¡Gratis para socios!</strong>
+                <p>Como socio, no tienes costo por esta reserva</p>
+              </div>
+            </div>
+            
+            <div *ngIf="!summary.isMember" class="price-breakdown">
+              <div class="price-row">
+                <span>Precio base ({{ summary.duration }}):</span>
+                <span>${{ summary.basePrice }}</span>
+              </div>
+              
+              <div *ngIf="summary.hasLighting" class="price-row lighting">
+                <span>Iluminación (después de 17:00):</span>
+                <span>${{ summary.lightingFee }}</span>
+              </div>
+              
+              <div class="price-row total">
+                <span><strong>Total:</strong></span>
+                <span><strong>${{ summary.totalPrice }}</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeReservationModal()" [disabled]="isCreatingReservation">
+          Cancelar
+        </button>
+        <button class="btn-confirm" (click)="confirmReservation()" [disabled]="isCreatingReservation">
+          <span *ngIf="!isCreatingReservation">Confirmar Reserva</span>
+          <span *ngIf="isCreatingReservation">Creando...</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -7,6 +7,10 @@ export interface Reservation {
   endTime: string;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   notes?: string;
+  basePrice: number;
+  lightingFee?: number;
+  totalPrice: number;
+  hasLighting: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }

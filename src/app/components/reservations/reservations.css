@@ -313,6 +313,19 @@
   color: var(--primary-color);
 }
 
+.lighting-indicator {
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lighting-indicator mat-icon {
+  color: #ffc107;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
 .reservation-card mat-card-actions {
   padding: 16px 20px;
   display: flex;

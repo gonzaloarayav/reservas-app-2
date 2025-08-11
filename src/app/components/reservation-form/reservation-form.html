@@ -67,7 +67,13 @@
               <h3>{{ selectedCourt.name }}</h3>
               <p class="court-type">{{ selectedCourt.type | titlecase }}</p>
               <p class="court-location"><mat-icon>location_on</mat-icon> {{ selectedCourt.location }}</p>
-              <p class="court-price"><mat-icon>attach_money</mat-icon> ${{ selectedCourt.pricePerHour }} / hora</p>
+              <p class="court-price" *ngIf="!isMember()"><mat-icon>attach_money</mat-icon> ${{ selectedCourt.pricePerHour }} / hora</p>
+              <p class="court-lighting" *ngIf="selectedCourt.lightingFeePerHour > 0 && !isMember()">
+                <mat-icon>lightbulb</mat-icon> Luz: ${{ selectedCourt.lightingFeePerHour }} / hora (después de las 17:00)
+              </p>
+              <p class="member-benefit" *ngIf="isMember()">
+                <mat-icon>star</mat-icon> ¡Gratis para socios!
+              </p>
             </div>
           </mat-card>
         </div>
@@ -96,19 +102,7 @@
           </mat-form-field>
         </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Duración (horas)</mat-label>
-            <mat-select formControlName="duration">
-              <mat-option [value]="1">1 hora</mat-option>
-              <mat-option [value]="2">2 horas</mat-option>
-              <mat-option [value]="3">3 horas</mat-option>
-            </mat-select>
-            <mat-error *ngIf="reservationForm.get('duration')?.hasError('required')">
-              Debes seleccionar la duración
-            </mat-error>
-          </mat-form-field>
-        </div>
+        <!-- Duration is fixed to 1.5 hours -->
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">
@@ -117,7 +111,7 @@
           </mat-form-field>
         </div>
 
-        <div class="reservation-summary" *ngIf="selectedCourt && reservationForm.get('date')?.value && reservationForm.get('startTime')?.value && reservationForm.get('duration')?.value">
+        <div class="reservation-summary" *ngIf="selectedCourt && reservationForm.get('date')?.value && reservationForm.get('startTime')?.value">
           <h3>Resumen de la reserva</h3>
           <div class="summary-details">
             <div class="summary-item">
@@ -132,17 +126,29 @@
               <span class="label">Hora de inicio:</span>
               <span class="value">{{ reservationForm.get('startTime')?.value }}</span>
             </div>
-            <div class="summary-item" *ngIf="reservationForm.get('startTime')?.value && reservationForm.get('duration')?.value">
+            <div class="summary-item" *ngIf="reservationForm.get('startTime')?.value">
               <span class="label">Hora de fin:</span>
               <span class="value">{{ calculateEndTime() }}</span>
             </div>
             <div class="summary-item">
               <span class="label">Duración:</span>
-              <span class="value">{{ reservationForm.get('duration')?.value }} hora(s)</span>
+              <span class="value">1.5 horas</span>
             </div>
-            <div class="summary-item">
+            <div class="summary-item" *ngIf="!isMember()">
+              <span class="label">Precio base:</span>
+              <span class="value">${{ selectedCourt.pricePerHour * 1.5 }}</span>
+            </div>
+            <div class="summary-item" *ngIf="isAfter17Hours() && !isMember()">
+              <span class="label">Luz:</span>
+              <span class="value">${{ selectedCourt.lightingFeePerHour * 1.5 }}</span>
+            </div>
+            <div class="summary-item total" *ngIf="!isMember()">
               <span class="label">Precio total:</span>
-              <span class="value price">${{ selectedCourt.pricePerHour * reservationForm.get('duration')?.value }}</span>
+              <span class="value price">${{ calculateTotalPrice() }}</span>
+            </div>
+            <div class="summary-item total" *ngIf="isMember()">
+              <span class="label">Precio total:</span>
+              <span class="value price member-price">¡Gratis para socios!</span>
             </div>
           </div>
         </div>

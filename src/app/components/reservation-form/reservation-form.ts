@@ -70,9 +70,17 @@ export class ReservationForm implements OnInit {
       return;
     }
 
-    // Generate time slots from 8:00 to 22:00
-    for (let hour = 8; hour < 22; hour++) {
-      this.timeSlots.push(`${hour}:00`);
+    // Generate fixed 1.5 hour time blocks: 8:00-9:30, 9:30-11:00, etc.
+    const startHour = 8;
+    const endHour = 21;
+    let currentTime = startHour * 60; // Convert to minutes
+    
+    while (currentTime + 90 <= endHour * 60) { // 90 minutes = 1.5 hours
+      const hours = Math.floor(currentTime / 60);
+      const minutes = currentTime % 60;
+      const timeString = `${hours}:${minutes.toString().padStart(2, '0')}`;
+      this.timeSlots.push(timeString);
+      currentTime += 90; // Add 1.5 hours (90 minutes)
     }
 
     this.initForm();
@@ -97,7 +105,7 @@ export class ReservationForm implements OnInit {
       courtId: ['', Validators.required],
       date: ['', Validators.required],
       startTime: ['', Validators.required],
-      duration: [1, [Validators.required, Validators.min(1), Validators.max(3)]],
+      duration: [1.5, [Validators.required]], // Fixed duration of 1.5 hours
       notes: [''],
     });
 
@@ -190,10 +198,22 @@ export class ReservationForm implements OnInit {
     const [hours, minutes] = formValues.startTime.split(':').map(Number);
     reservationDate.setHours(hours, minutes, 0, 0);
     
-    // Calculate end time based on start time and duration
-    const startHour = parseInt(formValues.startTime.split(':')[0]);
-    const endHour = startHour + formValues.duration;
-    const endTime = `${endHour}:00`;
+    // Calculate end time based on start time and duration (1.5 hours)
+    const [startHour, startMinute] = formValues.startTime.split(':').map(Number);
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = startTotalMinutes + (formValues.duration * 60);
+    const endHour = Math.floor(endTotalMinutes / 60);
+    const endMinute = endTotalMinutes % 60;
+    const endTime = `${endHour}:${endMinute.toString().padStart(2, '0')}`;
+
+    // Calculate pricing - only charge non-members
+    const currentUser = this.userService.getCurrentUser();
+    const isNonMember = currentUser?.membershipType === 'no_socio';
+    
+    const basePrice = isNonMember ? this.selectedCourt!.pricePerHour * formValues.duration : 0;
+    const hasLighting = startHour >= 17; // Lighting fee applies after 17:00
+    const lightingFee = (isNonMember && hasLighting) ? this.selectedCourt!.lightingFeePerHour * formValues.duration : 0;
+    const totalPrice = basePrice + lightingFee;
 
     const reservation: Reservation = {
       userId: this.userId!,
@@ -202,7 +222,11 @@ export class ReservationForm implements OnInit {
       startTime: formValues.startTime,
       endTime: endTime,
       status: 'confirmed',
-      notes: formValues.notes || ''
+      notes: formValues.notes || '',
+      basePrice: basePrice,
+      lightingFee: lightingFee,
+      totalPrice: totalPrice,
+      hasLighting: hasLighting
     };
 
     this.reservationService.createReservation(reservation).subscribe({
@@ -240,15 +264,53 @@ export class ReservationForm implements OnInit {
 
   calculateEndTime(): string {
     const startTime = this.reservationForm.get('startTime')?.value;
-    const duration = this.reservationForm.get('duration')?.value;
     
-    if (!startTime || !duration) {
+    if (!startTime) {
       return '';
     }
     
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = startTotalMinutes + (1.5 * 60); // Fixed 1.5 hours
+    const endHour = Math.floor(endTotalMinutes / 60);
+    const endMinute = endTotalMinutes % 60;
+    
+    return `${endHour}:${endMinute.toString().padStart(2, '0')}`;
+  }
+
+  isAfter17Hours(): boolean {
+    const startTime = this.reservationForm.get('startTime')?.value;
+    
+    if (!startTime) {
+      return false;
+    }
+    
     const startHour = parseInt(startTime.split(':')[0]);
-    const endHour = startHour + duration;
-    return `${endHour}:00`;
+    return startHour >= 17;
+  }
+
+  isMember(): boolean {
+    const currentUser = this.userService.getCurrentUser();
+    return currentUser?.membershipType === 'socio';
+  }
+
+  calculateTotalPrice(): number {
+    if (!this.selectedCourt) {
+      return 0;
+    }
+    
+    // Only charge non-members
+    const currentUser = this.userService.getCurrentUser();
+    const isNonMember = currentUser?.membershipType === 'no_socio';
+    
+    if (!isNonMember) {
+      return 0; // Free for members
+    }
+    
+    const basePrice = this.selectedCourt.pricePerHour * 1.5;
+    const lightingFee = this.isAfter17Hours() ? this.selectedCourt.lightingFeePerHour * 1.5 : 0;
+    
+    return basePrice + lightingFee;
   }
 
   onImageError(event: Event): void {
