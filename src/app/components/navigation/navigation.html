@@ -20,6 +20,11 @@
       <a mat-button routerLink="/reservations" routerLinkActive="active">
         <mat-icon>event</mat-icon> <span>Reservas</span>
       </a>
+
+      <!-- Toggle de tema oscuro -->
+      <button mat-icon-button (click)="toggleTheme()" [title]="isDarkTheme ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+        <mat-icon>{{ isDarkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
       
       <!-- Usuario autenticado -->
       <div *ngIf="isLoggedIn()" class="user-section">

@@ -50,6 +50,8 @@
   padding: 0 16px;
   height: 36px;
   line-height: 36px;
+  color: white;
+  text-decoration: none;
 }
 
 .nav-links a mat-icon {
@@ -71,6 +73,7 @@
   border-radius: 20px;
   padding: 0 12px;
   background-color: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 .user-section {
@@ -96,6 +99,41 @@
 
 .auth-section mat-icon {
   margin-right: 4px;
+}
+
+/* Estilos para tema oscuro */
+body.dark-theme .navbar {
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .logo {
+  color: #ffffff;
+}
+
+body.dark-theme .nav-links a {
+  color: #ffffff;
+}
+
+body.dark-theme .user-name {
+  color: #ffffff;
+}
+
+body.dark-theme .auth-section a {
+  color: #ffffff;
+}
+
+body.dark-theme .user-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+body.dark-theme .active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .nav-links a:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Responsive adjustments */
