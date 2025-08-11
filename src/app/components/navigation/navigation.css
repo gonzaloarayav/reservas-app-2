@@ -73,6 +73,31 @@
   background-color: rgba(255, 255, 255, 0.15);
 }
 
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  font-size: 14px;
+  color: white;
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+}
+
+.auth-section a {
+  color: white;
+  text-decoration: none;
+}
+
+.auth-section mat-icon {
+  margin-right: 4px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .container {

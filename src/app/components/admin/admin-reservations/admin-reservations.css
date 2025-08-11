@@ -1,0 +1,172 @@
+.admin-reservations {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  color: #1976d2;
+  margin-bottom: 8px;
+  font-size: 2.2rem;
+  font-weight: 300;
+}
+
+.page-header p {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.filters-card {
+  margin-bottom: 24px;
+}
+
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-row mat-form-field {
+  min-width: 200px;
+  flex: 1;
+}
+
+.bulk-actions-card {
+  margin-bottom: 16px;
+  background-color: #e3f2fd;
+}
+
+.bulk-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.selection-info {
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.filters-container mat-form-field {
+  min-width: 200px;
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.reservations-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+.reservations-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+
+.reservations-table td {
+  padding: 12px 8px;
+}
+
+.actions-container {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.actions-container button {
+  width: 36px;
+  height: 36px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px 24px;
+  color: #666;
+}
+
+.no-data mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.no-data p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+mat-chip {
+  font-size: 0.8rem;
+  min-height: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-reservations {
+    padding: 16px;
+  }
+  
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filters-container mat-form-field {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .actions-container {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* Estados de reserva */
+.mat-mdc-chip.mat-primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mat-mdc-chip.mat-accent {
+  background-color: #ff9800;
+  color: white;
+}
+
+.mat-mdc-chip.mat-warn {
+  background-color: #f44336;
+  color: white;
+}

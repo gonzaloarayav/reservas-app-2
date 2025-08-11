@@ -1,0 +1,95 @@
+<div class="court-block-dialog">
+  <h2 mat-dialog-title>
+    {{ data.block ? 'Editar Bloqueo' : 'Nuevo Bloqueo de Cancha' }}
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="blockForm" class="block-form">
+      <!-- Selección de cancha -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cancha</mat-label>
+        <mat-select formControlName="courtId" required>
+          <mat-option *ngFor="let court of data.courts" [value]="court.id">
+            {{ court.name }} - {{ court.type }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="blockForm.get('courtId')?.hasError('required')">
+          Selecciona una cancha
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Fechas -->
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-error *ngIf="blockForm.get('startDate')?.hasError('required')">
+            Fecha de inicio requerida
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-error *ngIf="blockForm.get('endDate')?.hasError('required')">
+            Fecha de fin requerida
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Toggle todo el día -->
+      <div class="form-row">
+        <mat-slide-toggle formControlName="isAllDay" color="primary">
+          Todo el día
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Horarios (solo si no es todo el día) -->
+      <div class="form-row" *ngIf="!blockForm.get('isAllDay')?.value">
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de inicio</mat-label>
+          <input matInput type="time" formControlName="startTime">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de fin</mat-label>
+          <input matInput type="time" formControlName="endTime">
+        </mat-form-field>
+      </div>
+
+      <!-- Tipo de bloqueo -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo de bloqueo</mat-label>
+        <mat-select formControlName="type" required>
+          <mat-option value="maintenance">Mantenimiento</mat-option>
+          <mat-option value="event">Evento</mat-option>
+          <mat-option value="closure">Cierre</mat-option>
+          <mat-option value="other">Otro</mat-option>
+        </mat-select>
+        <mat-error *ngIf="blockForm.get('type')?.hasError('required')">
+          Selecciona un tipo de bloqueo
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Razón -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Razón del bloqueo</mat-label>
+        <textarea matInput formControlName="reason" rows="3" 
+                  placeholder="Describe la razón del bloqueo (opcional)"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" 
+            (click)="onSave()" 
+            [disabled]="!blockForm.valid">
+      {{ data.block ? 'Actualizar' : 'Crear' }} Bloqueo
+    </button>
+  </mat-dialog-actions>
+</div>

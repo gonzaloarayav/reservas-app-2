@@ -1,0 +1,174 @@
+<div class="admin-users">
+  <div class="page-header">
+    <h1>Gestión de Usuarios</h1>
+    <p>Administra los usuarios del sistema</p>
+  </div>
+
+  <!-- Filtros -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por rol</mat-label>
+          <mat-select [(value)]="filterRole" (selectionChange)="applyFilters()">
+            <mat-option value="all">Todos los roles</mat-option>
+            <mat-option value="user">Usuarios</mat-option>
+            <mat-option value="admin">Administradores</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar usuario</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput 
+                 [(ngModel)]="searchTerm" 
+                 (input)="applyFilters()"
+                 placeholder="Buscar por nombre o email">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de usuarios -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredUsers" class="users-table">
+          
+          <!-- Columna Nombre -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Usuario</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-info">
+                <div class="user-avatar">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <div class="user-details">
+                  <strong>{{ user.name }}</strong>
+                  <p *ngIf="user.phone">{{ user.phone }}</p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Columna Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">
+              <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+            </td>
+          </ng-container>
+
+          <!-- Columna Rol -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Rol</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip [color]="getRoleColor(user.role)" selected>
+                {{ getRoleText(user.role) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Columna Reservas -->
+          <ng-container matColumnDef="reservations">
+            <th mat-header-cell *matHeaderCellDef>Reservas</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="reservation-count">
+                <mat-icon>event</mat-icon>
+                <span>{{ getUserReservationCount(user.id!) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Columna Fecha de registro -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Registro</th>
+            <td mat-cell *matCellDef="let user">
+              {{ formatDate(user.createdAt) }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="actions-container">
+                <button mat-icon-button 
+                        (click)="viewUserDetails(user)"
+                        matTooltip="Ver detalles"
+                        color="primary">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                
+                <button mat-icon-button 
+                        (click)="toggleUserRole(user)"
+                        [matTooltip]="user.role === 'admin' ? 'Quitar permisos de admin' : 'Hacer administrador'"
+                        color="accent">
+                  <mat-icon>{{ user.role === 'admin' ? 'admin_panel_settings' : 'person_add' }}</mat-icon>
+                </button>
+                
+                <button mat-icon-button 
+                        *ngIf="user.role !== 'admin'"
+                        (click)="deleteUser(user)"
+                        matTooltip="Eliminar usuario"
+                        color="warn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div *ngIf="filteredUsers.length === 0" class="no-data">
+          <mat-icon>people_outline</mat-icon>
+          <p>No se encontraron usuarios</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Estadísticas rápidas -->
+  <div class="stats-section">
+    <h2>Estadísticas de Usuarios</h2>
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon total">people</mat-icon>
+            <div class="stat-info">
+              <h3>{{ users.length }}</h3>
+              <p>Total de usuarios</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon admins">admin_panel_settings</mat-icon>
+            <div class="stat-info">
+              <h3>{{ getAdminCount() }}</h3>
+              <p>Administradores</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon regular">person</mat-icon>
+            <div class="stat-info">
+              <h3>{{ getRegularUserCount() }}</h3>
+              <p>Usuarios regulares</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

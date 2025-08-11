@@ -1,0 +1,345 @@
+.admin-reports {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-header h1 {
+  color: #1976d2;
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 300;
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.header-actions mat-form-field {
+  min-width: 180px;
+}
+
+/* Métricas principales */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.metric-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.metric-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metric-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-card.revenue .metric-icon {
+  background-color: #e8f5e8;
+  color: #388e3c;
+}
+
+.metric-card.reservations .metric-icon {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.metric-card.average .metric-icon {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.metric-card.popular .metric-icon {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.metric-info h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.metric-info p {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Sección de gráficos */
+.charts-section {
+  margin-top: 40px;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  min-height: 300px;
+}
+
+.chart-card.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Estadísticas de estado */
+.status-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status-item {
+  position: relative;
+}
+
+.status-bar {
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  transition: width 0.3s ease;
+}
+
+.status-item.confirmed .status-bar {
+  background-color: #4caf50;
+}
+
+.status-item.pending .status-bar {
+  background-color: #ff9800;
+}
+
+.status-item.completed .status-bar {
+  background-color: #2196f3;
+}
+
+.status-item.cancelled .status-bar {
+  background-color: #f44336;
+}
+
+.status-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.status-count {
+  font-weight: bold;
+  color: #666;
+}
+
+/* Estadísticas por tipo de cancha */
+.court-type-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.court-type-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.court-type-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.court-type-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.court-type-count {
+  font-weight: bold;
+  color: #666;
+}
+
+.court-type-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.court-type-fill {
+  height: 100%;
+  background-color: #1976d2;
+  transition: width 0.3s ease;
+}
+
+/* Gráfico de ingresos mensuales */
+.monthly-revenue-chart {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  height: 200px;
+  padding: 20px 0;
+}
+
+.month-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.month-bar {
+  width: 100%;
+  height: 150px;
+  background-color: #e0e0e0;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+
+.month-fill {
+  width: 100%;
+  background: linear-gradient(to top, #1976d2, #42a5f5);
+  transition: height 0.3s ease;
+  border-radius: 4px 4px 0 0;
+}
+
+.month-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.month-label {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.month-revenue {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Sin datos */
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.no-data p {
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-reports {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .page-header h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .header-actions {
+    justify-content: center;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .monthly-revenue-chart {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  
+  .month-item {
+    min-width: 60px;
+  }
+  
+  .month-bar {
+    height: 100px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metric-card,
+.chart-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Tooltips y hover effects */
+.metric-card:hover .metric-icon {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.status-bar:hover,
+.court-type-fill:hover,
+.month-fill:hover {
+  opacity: 0.8;
+}

@@ -18,25 +18,37 @@
         <mat-icon>event</mat-icon> <span>Reservas</span>
       </a>
       
-      <!-- Menú de usuario -->
-      <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="isLoggedIn()" class="user-button">
-        <mat-icon>account_circle</mat-icon>
-        <span>{{ currentUser?.name || 'Usuario' }}</span>
-      </button>
-      <a mat-button routerLink="/login" *ngIf="!isLoggedIn()" class="login-button">
-        <mat-icon>login</mat-icon>
-        <span>Iniciar Sesión</span>
-      </a>
-      <mat-menu #userMenu="matMenu">
-        <a mat-menu-item routerLink="/profile">
-          <mat-icon>person</mat-icon>
-          <span>Mi Perfil</span>
-        </a>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
-          <span>Cerrar Sesión</span>
+      <!-- Usuario autenticado -->
+      <div *ngIf="isLoggedIn()" class="user-section">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
         </button>
-      </mat-menu>
+        <span class="user-name">{{ currentUser?.name }}</span>
+
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </a>
+          <a mat-menu-item routerLink="/admin" *ngIf="isAdmin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Panel de Administrador</span>
+          </a>
+          <mat-divider *ngIf="isAdmin()"></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Usuario no autenticado -->
+      <div *ngIf="!isLoggedIn()" class="auth-section">
+        <a mat-button routerLink="/login">
+          <mat-icon>login</mat-icon>
+          Iniciar Sesión
+        </a>
+      </div>
     </nav>
   </div>
 </mat-toolbar>

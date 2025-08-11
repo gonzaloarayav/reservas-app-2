@@ -1,0 +1,264 @@
+<div class="admin-courts">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Gestión de Canchas</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <mat-tab-group>
+        <!-- Pestaña de Canchas -->
+        <mat-tab label="Canchas">
+          <div class="page-header">
+            <button mat-raised-button color="primary" (click)="openForm()">
+              <mat-icon>add</mat-icon>
+              Nueva Cancha
+            </button>
+          </div>
+
+  <!-- Formulario de cancha -->
+  <mat-card *ngIf="showForm" class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ editingCourt ? 'Editar Cancha' : 'Nueva Cancha' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="courtForm" (ngSubmit)="saveCourt()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre de la cancha</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Cancha de Tenis #1">
+            <mat-error>{{ getFormErrorMessage('name') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de cancha</mat-label>
+            <mat-select formControlName="type">
+              <mat-option *ngFor="let type of courtTypes" [value]="type.value">
+                {{ type.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getFormErrorMessage('type') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Ubicación</mat-label>
+            <input matInput formControlName="location" placeholder="Ej: Sector A, Cancha 1">
+            <mat-error>{{ getFormErrorMessage('location') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Precio por hora</mat-label>
+            <input matInput type="number" formControlName="pricePerHour" placeholder="0">
+            <span matPrefix>$</span>
+            <mat-error>{{ getFormErrorMessage('pricePerHour') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" rows="3" 
+                    placeholder="Descripción opcional de la cancha"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>URL de imagen</mat-label>
+          <input matInput formControlName="imageUrl" placeholder="https://ejemplo.com/imagen.jpg">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Características</mat-label>
+          <input matInput formControlName="features" 
+                 placeholder="Ej: Iluminación LED, Césped sintético, Vestuarios (separar con comas)">
+          <mat-hint>Separa las características con comas</mat-hint>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-slide-toggle formControlName="available" color="primary">
+            Cancha disponible
+          </mat-slide-toggle>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="closeForm()">Cancelar</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!courtForm.valid">
+            {{ editingCourt ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Lista de canchas -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="courts" class="courts-table">
+          
+          <!-- Columna Nombre -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let court">
+              <div class="court-info">
+                <strong>{{ court.name }}</strong>
+                <p *ngIf="court.description">{{ court.description }}</p>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Columna Tipo -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let court">
+              <mat-chip selected color="primary">
+                {{ getTypeLabel(court.type) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Columna Ubicación -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Ubicación</th>
+            <td mat-cell *matCellDef="let court">{{ court.location }}</td>
+          </ng-container>
+
+          <!-- Columna Precio -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Precio/Hora</th>
+            <td mat-cell *matCellDef="let court">
+              <strong>${{ court.pricePerHour }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Columna Disponibilidad -->
+          <ng-container matColumnDef="available">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let court">
+              <mat-chip [color]="court.available ? 'primary' : 'warn'" selected>
+                {{ court.available ? 'Disponible' : 'No disponible' }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let court">
+              <div class="actions-container">
+                <button mat-icon-button 
+                        (click)="openForm(court)"
+                        matTooltip="Editar cancha"
+                        color="primary">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                
+                <button mat-icon-button 
+                        (click)="toggleAvailability(court)"
+                        [matTooltip]="court.available ? 'Deshabilitar' : 'Habilitar'"
+                        [color]="court.available ? 'warn' : 'primary'">
+                  <mat-icon>{{ court.available ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+
+                <button mat-icon-button 
+                        (click)="openBlockDialog(court.id)"
+                        matTooltip="Bloquear cancha"
+                        color="accent">
+                  <mat-icon>block</mat-icon>
+                </button>
+                
+                <button mat-icon-button 
+                        (click)="deleteCourt(court)"
+                        matTooltip="Eliminar cancha"
+                        color="warn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div *ngIf="courts.length === 0" class="no-data">
+          <mat-icon>sports_tennis</mat-icon>
+          <p>No hay canchas registradas</p>
+          <button mat-raised-button color="primary" (click)="openForm()">
+            Agregar primera cancha
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+        </mat-tab>
+
+        <!-- Pestaña de Bloqueos -->
+        <mat-tab label="Bloqueos">
+          <div class="page-header">
+            <button mat-raised-button color="accent" (click)="openBlockDialog()">
+              <mat-icon>block</mat-icon>
+              Nuevo Bloqueo
+            </button>
+          </div>
+
+          <!-- Tabla de bloqueos -->
+          <div class="table-container">
+            <table mat-table [dataSource]="courtBlocks" class="mat-elevation-z8">
+              <!-- Columna de Cancha -->
+              <ng-container matColumnDef="court">
+                <th mat-header-cell *matHeaderCellDef>Cancha</th>
+                <td mat-cell *matCellDef="let block">{{ getCourtName(block.courtId) }}</td>
+              </ng-container>
+
+              <!-- Columna de Fechas -->
+              <ng-container matColumnDef="dates">
+                <th mat-header-cell *matHeaderCellDef>Fechas</th>
+                <td mat-cell *matCellDef="let block">{{ formatBlockDates(block) }}</td>
+              </ng-container>
+
+              <!-- Columna de Horario -->
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef>Horario</th>
+                <td mat-cell *matCellDef="let block">{{ formatBlockTime(block) }}</td>
+              </ng-container>
+
+              <!-- Columna de Tipo -->
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                <td mat-cell *matCellDef="let block">
+                  <mat-chip [color]="block.type === 'maintenance' ? 'warn' : 'primary'">
+                    {{ blockTypes[block.type] }}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Columna de Razón -->
+              <ng-container matColumnDef="reason">
+                <th mat-header-cell *matHeaderCellDef>Razón</th>
+                <td mat-cell *matCellDef="let block">{{ block.reason || '-' }}</td>
+              </ng-container>
+
+              <!-- Columna de Acciones -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let block">
+                  <button mat-icon-button color="primary" (click)="editBlock(block)" matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteBlock(block.id)" matTooltip="Eliminar">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="blockColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: blockColumns;"></tr>
+            </table>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

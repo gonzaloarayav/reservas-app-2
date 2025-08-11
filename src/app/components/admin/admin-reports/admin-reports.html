@@ -1,0 +1,171 @@
+<div class="admin-reports">
+  <div class="page-header">
+    <h1>Reportes y Estadísticas</h1>
+    <div class="header-actions">
+      <mat-form-field appearance="outline">
+        <mat-label>Período</mat-label>
+        <mat-select [(value)]="selectedPeriod" (selectionChange)="onPeriodChange()">
+          <mat-option value="week">Última semana</mat-option>
+          <mat-option value="month">Último mes</mat-option>
+          <mat-option value="quarter">Último trimestre</mat-option>
+          <mat-option value="year">Último año</mat-option>
+          <mat-option value="all">Todo el tiempo</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <button mat-raised-button color="primary" (click)="exportReport()">
+        <mat-icon>download</mat-icon>
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- Métricas principales -->
+  <div class="metrics-grid">
+    <mat-card class="metric-card revenue">
+      <mat-card-content>
+        <div class="metric-content">
+          <mat-icon class="metric-icon">attach_money</mat-icon>
+          <div class="metric-info">
+            <h3>${{ stats.totalRevenue.toFixed(2) }}</h3>
+            <p>Ingresos Totales</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card reservations">
+      <mat-card-content>
+        <div class="metric-content">
+          <mat-icon class="metric-icon">event</mat-icon>
+          <div class="metric-info">
+            <h3>{{ stats.totalReservations }}</h3>
+            <p>Total Reservas</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card average">
+      <mat-card-content>
+        <div class="metric-content">
+          <mat-icon class="metric-icon">trending_up</mat-icon>
+          <div class="metric-info">
+            <h3>${{ stats.averageReservationValue.toFixed(2) }}</h3>
+            <p>Promedio por Reserva</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card popular">
+      <mat-card-content>
+        <div class="metric-content">
+          <mat-icon class="metric-icon">star</mat-icon>
+          <div class="metric-info">
+            <h3>{{ stats.mostPopularCourt || 'N/A' }}</h3>
+            <p>Cancha Más Popular</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Gráficos y estadísticas detalladas -->
+  <div class="charts-section">
+    <div class="charts-row">
+      <!-- Estados de reservas -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Reservas por Estado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="status-stats">
+            <div class="status-item confirmed">
+              <div class="status-bar" [style.width.%]="(stats.reservationsByStatus.confirmed / stats.totalReservations) * 100"></div>
+              <div class="status-info">
+                <span class="status-label">Confirmadas</span>
+                <span class="status-count">{{ stats.reservationsByStatus.confirmed }}</span>
+              </div>
+            </div>
+            
+            <div class="status-item pending">
+              <div class="status-bar" [style.width.%]="(stats.reservationsByStatus.pending / stats.totalReservations) * 100"></div>
+              <div class="status-info">
+                <span class="status-label">Pendientes</span>
+                <span class="status-count">{{ stats.reservationsByStatus.pending }}</span>
+              </div>
+            </div>
+            
+            <div class="status-item completed">
+              <div class="status-bar" [style.width.%]="(stats.reservationsByStatus.completed / stats.totalReservations) * 100"></div>
+              <div class="status-info">
+                <span class="status-label">Completadas</span>
+                <span class="status-count">{{ stats.reservationsByStatus.completed }}</span>
+              </div>
+            </div>
+            
+            <div class="status-item cancelled">
+              <div class="status-bar" [style.width.%]="(stats.reservationsByStatus.cancelled / stats.totalReservations) * 100"></div>
+              <div class="status-info">
+                <span class="status-label">Canceladas</span>
+                <span class="status-count">{{ stats.reservationsByStatus.cancelled }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Reservas por tipo de cancha -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Reservas por Tipo de Cancha</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="court-type-stats">
+            <div *ngFor="let item of stats.reservationsByCourtType | keyvalue" class="court-type-item">
+              <div class="court-type-info">
+                <span class="court-type-label">{{ item.key }}</span>
+                <span class="court-type-count">{{ item.value }}</span>
+              </div>
+              <div class="court-type-bar">
+                <div class="court-type-fill" 
+                     [style.width.%]="(item.value / stats.totalReservations) * 100"></div>
+              </div>
+            </div>
+            
+            <div *ngIf="(stats.reservationsByCourtType | keyvalue).length === 0" class="no-data">
+              <p>No hay datos disponibles</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Ingresos mensuales -->
+    <mat-card class="chart-card full-width">
+      <mat-card-header>
+        <mat-card-title>Ingresos Mensuales (Últimos 6 meses)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="monthly-revenue-chart">
+          <div *ngFor="let month of stats.monthlyRevenue" class="month-item">
+            <div class="month-bar">
+              <div class="month-fill" 
+                   [style.height.%]="getMonthBarHeight(month.revenue)">
+              </div>
+            </div>
+            <div class="month-info">
+              <span class="month-label">{{ month.month }}</span>
+              <span class="month-revenue">${{ month.revenue.toFixed(0) }}</span>
+            </div>
+          </div>
+          
+          <div *ngIf="stats.monthlyRevenue.length === 0" class="no-data">
+            <p>No hay datos de ingresos disponibles</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

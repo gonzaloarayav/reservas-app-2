@@ -1,0 +1,95 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Panel de Administrador</h1>
+    <p>Gestiona tu sistema de reservas de canchas</p>
+  </div>
+
+  <!-- Estadísticas principales -->
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon reservations">event</mat-icon>
+          <div class="stat-info">
+            <h3>{{ stats.totalReservations }}</h3>
+            <p>Total Reservas</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon courts">sports_tennis</mat-icon>
+          <div class="stat-info">
+            <h3>{{ stats.totalCourts }}</h3>
+            <p>Canchas Registradas</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon users">people</mat-icon>
+          <div class="stat-info">
+            <h3>{{ stats.totalUsers }}</h3>
+            <p>Usuarios Registrados</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon pending">pending</mat-icon>
+          <div class="stat-info">
+            <h3>{{ stats.pendingReservations }}</h3>
+            <p>Reservas Pendientes</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Acciones rápidas -->
+  <div class="quick-actions">
+    <h2>Acciones Rápidas</h2>
+    <div class="actions-grid">
+      <mat-card class="action-card" routerLink="/admin/reservations">
+        <mat-card-content>
+          <mat-icon>event_note</mat-icon>
+          <h3>Gestionar Reservas</h3>
+          <p>Ver, aprobar y cancelar reservas</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" routerLink="/admin/courts">
+        <mat-card-content>
+          <mat-icon>sports_tennis</mat-icon>
+          <h3>Gestionar Canchas</h3>
+          <p>Agregar, editar y eliminar canchas</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" routerLink="/admin/users">
+        <mat-card-content>
+          <mat-icon>people</mat-icon>
+          <h3>Gestionar Usuarios</h3>
+          <p>Ver y administrar usuarios del sistema</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" routerLink="/admin/reports">
+        <mat-card-content>
+          <mat-icon>assessment</mat-icon>
+          <h3>Reportes</h3>
+          <p>Ver estadísticas y reportes detallados</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

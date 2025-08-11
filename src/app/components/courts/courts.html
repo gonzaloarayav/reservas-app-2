@@ -73,8 +73,7 @@
         <a
           mat-raised-button
           color="accent"
-          [routerLink]="['/reservations/new']"
-          [queryParams]="{courtId: court.id}"
+          [routerLink]="['/reserve', court.id]"
         >
           <mat-icon>event_available</mat-icon> Reservar
         </a>

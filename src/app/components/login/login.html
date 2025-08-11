@@ -1,0 +1,67 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Iniciar Sesión</mat-card-title>
+      <mat-card-subtitle>Accede a tu cuenta de reservas</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput 
+                 type="email" 
+                 [(ngModel)]="email" 
+                 name="email" 
+                 required 
+                 email>
+          <mat-icon matSuffix>email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput 
+                 type="password" 
+                 [(ngModel)]="password" 
+                 name="password" 
+                 required>
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <button mat-raised-button 
+                color="primary" 
+                type="submit" 
+                class="full-width login-button"
+                [disabled]="isLoading || !loginForm.form.valid">
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+          <span *ngIf="isLoading">Iniciando sesión...</span>
+        </button>
+      </form>
+
+      <div class="demo-section">
+        <h3>Cuentas de Demostración</h3>
+        <p>Usa estas cuentas para probar la aplicación:</p>
+        
+        <button mat-stroked-button 
+                color="accent" 
+                class="demo-button"
+                (click)="loginAsAdmin()">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Entrar como Administrador
+        </button>
+
+        <button mat-stroked-button 
+                color="primary" 
+                class="demo-button"
+                (click)="loginAsUser()">
+          <mat-icon>person</mat-icon>
+          Entrar como Usuario
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
